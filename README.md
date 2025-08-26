@@ -70,7 +70,8 @@ De gegenereerde OpenAPI specificatie heeft de volgende kenmerken:
   * `PATCH  /klanten/{id}` -> werkt alleen bepaalde gegevens van een bestaand Klant object bij (partial update)
 * Het is echter mogelijk de automatisch gegenereerde endpoints uit te breiden op twee manieren:
   * TODO
-  * TODO  
+  * TODO
+* Het MIM kenmerk [aggregatieType](https://docs.geostandaarden.nl/mim/mim/#metagegeven-aggregatietype) van een Relatiesoort bepaald of het target van de Relatiesoort integraal wordt "ingebed" in het JSON schema van het Objecttyoe of dat er alleen een verwijzing naar het target van de relatie wordt opgenomen. Als het aggregatieType de waarde "Compositie" of "Geen" heeft wordt het target van de relatie ingebed, als de waarde "Gedeeld" is wordt een link opgenomen (vgl UML aggregation versus composition relaties).   
 * De gebruikte response codes en error response schema's verwijzen momenteel naar de door VNG realisatie gedefinieerde codes in hun API-Kennisbank.
 
 ## Configuratie mogelijkheden
