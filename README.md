@@ -26,11 +26,11 @@ In de [Nederlandse API strategie](https://geonovum.github.io/KP-APIs/API-strateg
 > _"Iedere organisatie zou voor ontsluiting van data en functionaliteit altijd "API first" moeten werken"_
 
 ## Globale werking van de Imvertor OpenAPI generator
-De Imvertor OpenAPI generator tracht de "API-first" en "code-first" benaderingen te combineren door met behulp van Imvertor uit een op [MIM](https://www.geonovum.nl/geo-standaarden/metamodel-informatiemodellering-mim) gebaseerd informatiemodel (Java) programmacode te genereren en vervolgens uit deze programmacode de API specificatie te genereren waarbij gebruik wordt gemaakt van standaard software ([Swagger Java libraries]([https://spring.io/projects/spring-boot](https://github.com/swagger-api/swagger-core))). Meer specifiek bestaat dit proces uit vier stappen.
+De Imvertor OpenAPI generator tracht de "API-first" en "code-first" benaderingen te combineren door met behulp van Imvertor uit een op [MIM](https://www.geonovum.nl/geo-standaarden/metamodel-informatiemodellering-mim) gebaseerd informatiemodel (Java) programmacode te genereren en vervolgens uit deze programmacode de API specificatie te genereren waarbij gebruik wordt gemaakt van standaard software ([de Swagger Java libraries](https://github.com/swagger-api/swagger-core)). Meer specifiek bestaat dit proces uit vier stappen.
 
 1. Op basis van een op het MIM metamodel gebaseerd informatiemodel wordt met behulp van Imvertor een MIM XML serialisatie gegenereerd.
 2. Deze MIM serialisatie wordt (ook met behulp van Imvertor) omgezet naar Java programmacode en een property file met daarin meta- en stuurgegevens.
-3. Deze Java code en property file wordt samengevoegd met een bestaand Java project (dit is het Github project waar je nu naar kijkt)
+3. Deze Java code en property file wordt samengevoegd met een bestaand Java project (het Github project waar je nu naar kijkt).
 4. Met behulp van de Swagger Java libraries wordt de OpenAPI specificatie (versie 3.0.1 of 3.1.0) gegenereerd.
  
 #### 1. Het genereren van de MIM XML serialisatie
@@ -49,7 +49,7 @@ De CodeGeneration module is in staat de volgende programmacode te genereren:
 Wanneer de Java code is gegenereerd kan deze worden samengevoegd met het "Imvertor OpenAPI Generator Java project" (dit Github project). Hierbij wordt een aantal directories en files vervangen. Deze bestaande directories bevatten voorbeeldcode dat is gebaseerd op het Fietsenwinkel informatiemodel uit de [MIM Primer](https://armatiek.nl/MIMPrimer/fietsenwinkel.html): 
 
 De volgende files en directories dienen te worden vervangen:
-* De package directory `src/main/java/nl/imvertor/model` met daarin de Java classes die de Objecttypen representeren. 
+* De package directory `src/main/java/nl/imvertor/model` met daarin de Java classes die de niet-abstracte Objecttypen representeren. 
 * De package directory `src/main/java/nl/imvertor/resource` met daarin de Java resource classes. 
 * De properties file `src/main/resources/openapi.properties`
   
@@ -61,7 +61,7 @@ Wanneer de Java code en de property file is samengevoegd kan het Java project wo
 `mvn clean compile exec:java -Dexec.args="my-open-api-spec.yaml api31"`
 ### Kenmerken van de gegenereerde OpenAPI specificatie
 De gegenereerde OpenAPI specificatie heeft de volgende kenmerken:
-* Standaard worden er per niet abstract Objecttype CRUD endpoints gegenereerd, bijvoorbeeld voor het Objecttype "Klant":
+* Standaard worden er per niet-abstract Objecttype CRUD endpoints gegenereerd, bijvoorbeeld voor het Objecttype "Klant":
   * `GET    /klanten` -> retourneert de collectie van alle Klant objecten
   * `POST   /klanten` -> maakt een nieuw Klant object aan
   * `GET    /klanten/{id}` -> retourneert het Klant object met de unieke identificatie "id"
