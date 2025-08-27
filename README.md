@@ -16,7 +16,8 @@ De "Imvertor OpenAPI generator" is een voorziening waarmee [OpenAPI](https://swa
   - [Het samenvoegen van de Java code en het Imvertor OpenAPI generator project](#3-het-samenvoegen-van-de-java-code-en-het-imvertor-openapi-generator-project)
   - [Het genereren van de OpenAPI specificatie](#4-het-genereren-van-de-openapi-specificatie)
 - [Kenmerken van de gegenereerde OpenAPI specificatie](#kenmerken-van-de-gegenereerde-openapi-specificatie)
-- [Configuratie mogelijkheden](#configuratie-mogelijkheden) 
+- [Configuratie mogelijkheden](#configuratie-mogelijkheden)
+- [Voorbeeld OpenAPI specificatie](#voorbeeld-openapi-specificatie)
 
 ## "API-first" versus "code-first" API ontwikkeling
 In de wereld van API (Application Programming Interface) ontwikkeling zijn er globaal twee benaderingen, de zg "API-first" benadering en de "code-first" benadering. In de "API-first" benadering staat het API-ontwerp centraal en wordt als eerste de specificatie van de API gemaakt. Pas daarna wordt de implementatie van de API gebouwd op basis van deze specificatie. In de "Code-first" benadering wordt eerst de applicatiecode en logica worden ontwikkeld. De API ontstaat vervolgens uit die code, vaak door middel van code-annotaties of automatische generatie van documentatie en specificaties.
@@ -106,3 +107,6 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype":
 * `openapi.delete.operationId`: De id van de operation voor de DELETE method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
 * `openapi.put.operationId`: De id van de operation voor de PUT method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
 * `openapi.patch.operationId`: De id van de operation voor de PATCH method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
+
+## Voorbeeld OpenAPI specificatie
+Zie [Fietsenwinkel OpenAPI specificatie](https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) voor een voorbeeld dat is gegenereerd via deze methode. Dit voorbeeld bevat ook de custom GET collectie method op Klant objecten.
