@@ -13,7 +13,7 @@ De "Imvertor OpenAPI generator" is een voorziening waarmee [OpenAPI](https://swa
 - [Globale werking van de Imvertor OpenAPI generator](#globale-werking-van-de-imvertor-openapi-generator)
   - [Het genereren van de MIM XML serialisatie](#1-het-genereren-van-de-mim-xml-serialisatie)
   - [Het genereren van de Java code en property file](#2-het-genereren-van-de-java-code-en-property-file)
-  - [Het samenvoegen van de Java code en het template webservice project](#3-het-samenvoegen-van-de-java-code-en-het-template-webservice-project)
+  - [Het samenvoegen van de Java code en het Imvertor OpenAPI generator project](#3-het-samenvoegen-van-de-java-code-en-het-imvertor-openapi-generator-project)
   - [Het genereren van de OpenAPI specificatie](#4-het-genereren-van-de-openapi-specificatie)
 - [Kenmerken van de gegenereerde OpenAPI specificatie](#kenmerken-van-de-gegenereerde-openapi-specificatie)
 - [Configuratie mogelijkheden](#configuratie-mogelijkheden) 
@@ -45,7 +45,7 @@ De CodeGeneration module is in staat de volgende programmacode te genereren:
 * Een verzameling Java resource classes die elk een aantal method/operaties op één (niet abstract) Objecttype bevatten. Standaard worden alle [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operaties voor dat Objecttype gegenereerd (zie ook [Kenmerken van de gegenereerde OpenAPI specificatie](#kenmerken-van-de-gegenereerde-openapi-specificatie)). 
 * Een property file met daarin metagegevens uit het MIM model in een voor het Java project leesbare vorm (zoals de titel, omschrijving, versie en contactpersonen)
   
-#### 3. Het samenvoegen van de Java code en het template webservice project
+#### 3. Het samenvoegen van de Java code en het Imvertor OpenAPI generator project
 Wanneer de Java code is gegenereerd kan deze worden samengevoegd met het "Imvertor OpenAPI Generator" Java project (dit Github project). Hierbij wordt een aantal directories en files vervangen. Deze bestaande directories bevatten voorbeeldcode dat is gebaseerd op het Fietsenwinkel informatiemodel uit de [MIM Primer](https://armatiek.nl/MIMPrimer/fietsenwinkel.html). 
 
 De volgende files en directories dienen te worden vervangen:
