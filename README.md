@@ -117,4 +117,6 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype":
 * `openapi.patch.operationId`: De id van de operation voor de PATCH method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
 
 ## Voorbeeld OpenAPI specificatie
-Zie [Fietsenwinkel OpenAPI specificatie](https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) voor een voorbeeld dat is gegenereerd via deze methode. Dit voorbeeld bevat ook de custom GET collectie method op Klant objecten.
+Zie [Fietsenwinkel OpenAPI specificatie](https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) voor een voorbeeld OpenAPI specificatie dat is gegenereerd via deze methode. Dit voorbeeld bevat ook de custom GET collectie method op Klant objecten. 
+
+Dit voorbeeld kan ook worden bekeken in de [Swagger UI](https://generator.swagger.io/?url=https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) of via [Redocly](https://redocly.github.io/redoc/?url=https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml).
