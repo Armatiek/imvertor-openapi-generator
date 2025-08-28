@@ -38,13 +38,16 @@ De Imvertor OpenAPI generator tracht de "API-first" en "code-first" benaderingen
 Imvertor ondersteund sinds enige tijd het genereren van een XML representatie (serialisatie) van een in [Sparx Enterprise Architect](https://sparxsystems.com/products/ea/17.1/) opgesteld informatiemodel dat is gebaseerd op het MIM metamodel versie 1.1.0, 1.1.1 of 1.2. 
 
 #### 2. Het genereren van de Java code en property file
-Imvertor ondersteund tevens het genereren van Java code uit een [MIM versie 1.2](https://docs.geostandaarden.nl/mim/mim/) serialisatie. Het ondersteund hierbij ook een modus waarin het specifieke Java classes genereerd die kunnen worden gebruikt om OpenAPI specificaties te genereren. (Het genereren van deze Java code is momenteel nog niet beschikbaar in de master branch van het Imvertor Github project maar wel in de feature branch [CodeGeneration](https://github.com/Imvertor/Imvertor-Maven/tree/CodeGeneration)).
-
-De CodeGeneration module is in staat de volgende programmacode te genereren: 
+Imvertor ondersteund tevens het genereren van Java code uit een [MIM versie 1.2](https://docs.geostandaarden.nl/mim/mim/) serialisatie. Het ondersteund hierbij ook een modus waarin het specifieke Java classes genereert die kunnen worden gebruikt om OpenAPI specificaties te genereren (het genereren van deze Java code is momenteel nog niet beschikbaar in de master branch van het Imvertor Github project). De functionaliteit is in staat de volgende programmacode te genereren: 
 
 * Een verzameling Java classes (beans) die de MIM modelelementen zoals Objecttypen, Codelijsten, Referentielijsten, Gegevensgroeptypen uit het MIM model representeren. Deze Java classes zijn voorzien van specieke instructies (annotaties genoemd) die door de Swagger Java library kunnen worden gebruikt om een gedetailleerde OpenAPI specificatie te genereren.
 * Een verzameling Java resource classes die elk een aantal method/operaties op één (niet abstract) Objecttype bevatten. Standaard worden alle [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operaties voor dat Objecttype gegenereerd (zie ook [Kenmerken van de gegenereerde OpenAPI specificatie](#kenmerken-van-de-gegenereerde-openapi-specificatie)). 
 * Een property file met daarin metagegevens uit het MIM model in een voor het Java project leesbare vorm (zoals de titel, omschrijving, versie en contactpersonen)
+
+In de betreffende Imvertor processing mode of the default properties file moeten de volgende properties zijn gezet om Java code te genereren:
+
+* `createsourcecode = yes`
+* `sourcecodetypes  = java-openapi`
   
 #### 3. Het samenvoegen van de Java code en het Imvertor OpenAPI generator project
 Wanneer de Java code is gegenereerd kan deze worden samengevoegd met het "Imvertor OpenAPI Generator" Java project (dit Github project). Hierbij wordt een aantal directories en files vervangen. Deze bestaande directories bevatten voorbeeldcode dat is gebaseerd op het Fietsenwinkel informatiemodel uit de [MIM Primer](https://armatiek.nl/MIMPrimer/fietsenwinkel.html). 
@@ -54,25 +57,27 @@ De volgende files en directories dienen te worden vervangen:
 * De package directory `src/main/java/nl/imvertor/resource` met daarin de Java resource classes. 
 * De properties file `src/main/resources/openapi.properties`
 
-N.B. Imvertor SaaS voert het samenvoegen (stap 3) en het genereren van de OpenAPI specificatie (stap 4) automatisch uit en voegt de gegenereerde OpenAPI specificatie toe aan het resultaat .zip bestand. 
-  
 #### 4. Het genereren van de OpenAPI specificatie
-Wanneer de Java code en de property file is samengevoegd kan het Java project worden gebuild en vervolgens gestart. Daartie dient wel Java versie 11 of hoger te zijn geinstalleerd en de [Apache Maven](https://maven.apache.org/) build tooling.
+Wanneer de Java code en de property file is samengevoegd kan het Java project worden gebuild en vervolgens gestart. Daartoe dient Java versie 11 of hoger te zijn geinstalleerd en de [Apache Maven](https://maven.apache.org/) build tool.
 
-Voor het genereren van een OpenAPI versie 3.0.1 specificatie:
+Het genereren van een OpenAPI versie 3.0.1 specificatie kan via het volgende commando: 
 
 `mvn clean compile exec:java -Dexec.args="my-open-api-spec.yaml"`
 
-Voor het genereren van een OpenAPI versie 3.1.0 specificatie:
+En voor het genereren van een OpenAPI versie 3.1.0 specificatie:
 
 `mvn clean compile exec:java -Dexec.args="my-open-api-spec.yaml api31"`
 
 Dit commando genereert niet alleen de OpenAPI specificatie, maar valideert deze ook. De resultaten van de validatie worden op het scherm getoond maar ook weggeschreven in de log file `imvertor-openapi-gnerator.log`.
 
-N.B. Imvertor SaaS voert het samenvoegen (stap 3) en het genereren van de OpenAPI specificatie (stap 4) automatisch uit en voegt de gegenereerde OpenAPI specificatie toe aan het resultaat .zip bestand. 
+Imvertor SaaS voert het samenvoegen (stap 3) en het genereren van de OpenAPI specificatie (stap 4) automatisch uit en voegt de gegenereerde OpenAPI specificatie toe aan het resultaat .zip bestand. In de betreffende Imvertor processing mode of the default properties file moet daartoe de volgende property zijn gezet:
+
+* `createopenapi = yes`
 
 ### Kenmerken van de gegenereerde OpenAPI specificatie
 De gegenereerde OpenAPI specificatie heeft de volgende kenmerken:
+
+* De Imvertor OpenAPI Generator genereert de OpenAPI specificatie op basis van een regulier MIM model; er is dus geen ander model (met ander metamodel) nodig. Wel is het uiteraard mogeljk om de OpenAPI specificatie te genereren op basis van een MIM model dat toegesneden is op het genereren van OpenAPI, bijvoorbeeld door in dat model geen MIM Keuze constructies te gebruiken.
 * De Imvertor OpenAPI Generator tracht OpenAPI specificaties te genereren die voldoen aan de functionele en technische eisen zoals beschreven in de [NLGov REST API Design Rules](https://gitdocumentatie.logius.nl/publicatie/api/adr/2.0.2).
 * Standaard worden per niet-abstract Objecttype alle CRUD endpoints gegenereerd (zie ook [NLGov REST API Design Rules - HTTP Methods](https://gitdocumentatie.logius.nl/publicatie/api/adr/2.0.2/#http-methods), bijvoorbeeld voor het Objecttype "Klant":
   * `GET    /klanten` -> retourneert de collectie van alle Klant objecten
@@ -98,11 +103,18 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemo
 
 * `openapi.title`: De `title` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `naam` van het Informatiemodel gebruikt. 
 * `openapi.description`: De `description` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `definitie` van het Informatiemodel gebruikt.
-* `openapi.version`: De `versie` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Er is geen verstekwaarde voor deze tag. Voorbeeld '2.0.2'.
-* `openapi.pathVersion`:  Het versienummer dat wordt opgenomen als onderdeel van de url paden (bijvoorbeeld `https://api.example.org/v1/`). Dit moet een enkelvoudig nummer zijn zonder punten (geen semver) en zonder prefix 'v'. De verstekwaarde is '1'.  
+* `openapi.version`: De `versie` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Er is geen verstekwaarde voor deze tag. Voorbeeld '2.0.2'. 
 * `openapi.contact`: Het `contact` van de OpenAPI specificatie (zie [Contact Object](https://swagger.io/specification/#contact-object)). Er is geen verstekwaarde voor deze tag.
 * `openapi.license`: De `license` waaronder de OpenAPI specificatie wordt gepubliceerd zie [License Object](https://swagger.io/specification/#license-object)). De verstekwaarde is "European Union Public License, version 1.2 (EUPL-1.2)". 
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund in de OpenAPI specificatie. Als bijvoorbeeld de GET method voor zowel items als collecties moet worden ondersteund, alsmede POST, PUT, DELETE, maar geen PATCH, dan moet de waarde van deze tag zijn: `getCol,getItem,post,put,delete`.  
+* `openapi.pathVersion`:  Het versienummer dat wordt opgenomen als onderdeel van de url paden (bijvoorbeeld `https://api.example.org/v1/`). Dit moet een enkelvoudig nummer zijn zonder punten (geen semver) en zonder prefix 'v'. De verstekwaarde is '1'.
+* `openapi.openAPIVersion`: De versie van de OpenAPI specificatie die moet worden gegenereerd, versie '3.0.1' of '3.1.0'. De verstekwaarde is '3.0.1'.
+* `openapi.getCol.errorResponses`: De gewenste error response HTTP codes van de operation voor de GET method van collecties, bijvoorbeeld '400,401,403,404,409,410,415,429,500,501,503'. 
+* `openapi.getItem.errorResponses`: Idem voor de GET method van items.
+* `openapi.post.errorResponses`: Idem voor de POST method.
+* `openapi.delete.errorResponses`: Idem voor de DELETE method.
+* `openapi.put.errorResponses`:  Idem voor de PUT method.
+* `openapi.patch.errorResponses`: Idem voor de PATCH method.
 
 Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype":
 
@@ -110,11 +122,11 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype":
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund voor dit Objecttype in de OpenAPI specificatie (bijvoorbeeld `getCol,getItem,post,put,delete`).              
 * `openapi.path`: Het path van het endpoint voor dit Objecttype, bijvoorbeeld `klanten` (zie [Paths Object](https://swagger.io/specification/#paths-object)).
 * `openapi.getCol.operationId`: De id van de operation voor de GET method van collecties voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
-* `openapi.getItem.operationId`: De id van de operation voor de GET method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
-* `openapi.post.operationId`: De id van de operation voor de POST method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
-* `openapi.delete.operationId`: De id van de operation voor de DELETE method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
-* `openapi.put.operationId`: De id van de operation voor de PUT method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
-* `openapi.patch.operationId`: De id van de operation voor de PATCH method van items voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
+* `openapi.getItem.errorResponses`: Idem voor de GET method van items.
+* `openapi.post.errorResponses`: Idem voor de POST method.
+* `openapi.delete.errorResponses`: Idem voor de DELETE method.
+* `openapi.put.errorResponses`:  Idem voor de PUT method.
+* `openapi.patch.errorResponses`: Idem voor de PATCH method.
 
 ## Voorbeeld OpenAPI specificatie
 Zie [Fietsenwinkel OpenAPI specificatie](https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) voor een voorbeeld OpenAPI specificatie dat is gegenereerd via deze methode. Dit voorbeeld bevat ook de custom GET collectie method op Klant objecten. 
