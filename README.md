@@ -1,9 +1,9 @@
 # Imvertor OpenAPI generator
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-De "Imvertor OpenAPI generator" is een voorziening waarmee [OpenAPI](https://swagger.io/specification/) specificaties kunnen worden gegenereerd op basis van andere specificaties die door [Imvertor](https://github.com/Imvertor/Imvertor-Maven) worden opgeleverd, met name de MIM XML serialisatie en Java code. De Imvertor OpenAPI generator kan worden gezien als een alternatief voor twee bestaande voorzieningen waarmee OpenAPI specificaties kunnen worden gegenereerd uit Imvertor resultaten: 
-1. Het genereren van specificaties op basis van een specifiek informatiemodel dat voldoet aan het [MBG - Metamodel BerichtstructuurGegevens](https://vng-realisatie.github.io/MBG-Werkomgeving/) dat is ontwikkeld dor het [VNG](https://vng.nl/) (open source en onderdeel van Imvertor)
-2. Onderdelen van het Datahub project van het Kadaster (momenteel nog closed source). 
+De "Imvertor OpenAPI generator" is een voorziening waarmee [OpenAPI](https://swagger.io/specification/) specificaties kunnen worden gegenereerd op basis van andere resultaten die door [Imvertor](https://github.com/Imvertor/Imvertor-Maven) worden opgeleverd, met name de MIM XML serialisatie en Java code. De Imvertor OpenAPI generator kan worden gezien als een alternatief voor twee bestaande voorzieningen waarmee OpenAPI specificaties kunnen worden gegenereerd uit Imvertor resultaten: 
+1. Het genereren van specificaties op basis van een specifiek BSM (Bericht Structuur Model) dat voldoet aan het [MBG - Metamodel BerichtstructuurGegevens](https://vng-realisatie.github.io/MBG-Werkomgeving/). In dit BSM kan een API worden gespecificeerd op basis van gegevens in een UGM (Uitwisselings Gegevensmodellen). De implementatie van deze voorziening is ontwikkeld door de [VNG](https://vng.nl/) en is als open source opgenomen in Imvertor.
+2. Onderdelen van de Datahub services van het Kadaster waarbij onder andere APIs (GraphQL, OpenAPI) kunnen worden gegenereerd uit MIM modellen en aanvullende configuraties (momenteel nog closed source). 
 
 ## Inhoudsopgave
 
@@ -20,7 +20,7 @@ De "Imvertor OpenAPI generator" is een voorziening waarmee [OpenAPI](https://swa
 - [Voorbeeld OpenAPI specificatie](#voorbeeld-openapi-specificatie)
 
 ## "API-first" versus "code-first" API ontwikkeling
-In de wereld van API (Application Programming Interface) ontwikkeling zijn er globaal twee benaderingen, de zg "API-first" benadering en de "code-first" benadering. In de "API-first" benadering staat het API-ontwerp centraal en wordt als eerste de specificatie van de API gemaakt. Pas daarna wordt de implementatie van de API gebouwd op basis van deze specificatie. In de "Code-first" benadering wordt eerst de applicatiecode en logica worden ontwikkeld. De API ontstaat vervolgens uit die code, vaak door middel van code-annotaties of automatische generatie van documentatie en specificaties.
+In de wereld van API (Application Programming Interface) ontwikkeling zijn er globaal twee benaderingen, de z.g. "API-first" benadering en de "code-first" benadering. In de "API-first" benadering staat het API-ontwerp centraal en wordt als eerste de specificatie van de API gemaakt. Pas daarna wordt de implementatie van de API gebouwd op basis van deze specificatie. In de "code-first" benadering wordt eerst de applicatiecode en logica worden ontwikkeld. De API ontstaat vervolgens uit die code, vaak door middel van code-annotaties of automatische generatie van documentatie en specificaties.
 
 In de [Nederlandse API strategie](https://geonovum.github.io/KP-APIs/API-strategie-algemeen/Inleiding/) heeft de overheid duidelijk gekozen voor de [API-first benadering](https://geonovum.github.io/KP-APIs/API-strategie-algemeen/Inleiding/#api-first-strategie):
 
@@ -69,7 +69,8 @@ Dit commando genereert niet alleen de OpenAPI specificatie, maar valideert deze 
 
 ### Kenmerken van de gegenereerde OpenAPI specificatie
 De gegenereerde OpenAPI specificatie heeft de volgende kenmerken:
-* Standaard worden per niet-abstract Objecttype alle CRUD endpoints gegenereerd, bijvoorbeeld voor het Objecttype "Klant":
+* De Imvertor OpenAPI Generator tracht OpenAPI specificaties te genereren die voldoen aan de functionele en technische eisen zoals beschreven in de [NLGov REST API Design Rules](https://gitdocumentatie.logius.nl/publicatie/api/adr/2.0.2).
+* Standaard worden per niet-abstract Objecttype alle CRUD endpoints gegenereerd (zie ook [NLGov REST API Design Rules - HTTP Methods](https://gitdocumentatie.logius.nl/publicatie/api/adr/2.0.2/#http-methods), bijvoorbeeld voor het Objecttype "Klant":
   * `GET    /klanten` -> retourneert de collectie van alle Klant objecten
   * `POST   /klanten` -> maakt een nieuw Klant object aan
   * `GET    /klanten/{id}` -> retourneert het Klant object met de unieke identificatie "id"
@@ -80,7 +81,7 @@ De gegenereerde OpenAPI specificatie heeft de volgende kenmerken:
   * Door aan het Java project nog een extra Java resource class toe te voegen met de eigen operatie(s). Een voorbeeld van zo'n resource class is [CustomKlantResource](src/main/java/nl/imvertor/resource/fietsenwinkel/contacten/CustomKlantResource.java). Deze resource class bevat een GET operatie op een collectie van Klant objecten waarbij gefilterd kan worden op de naam en/of adres van een Klant. Omdat deze operatie het pad deelt met de automatisch gegenereerde GET collectie operatie , zou deze moeten worden uitgeschakeld, zie [Configuratie mogelijkheden](#configuratie-mogelijkheden).
   * Door aan het model een class toe te voegen met stereotype QueryParameters en deze via een MIM Relatiesoort te relateren met het Objectype waarvan een nieuw GET collectie endpoint moet worden toegevoegd. De MIM Attribuutsoorten die worden toegevoegd aan deze class worden de querystring parameters van dit nieuwe endpoint (NB. deze functionaliteit is nog in ontwikkeling).  
 * De GET operaties die collecties van objecten opleveren kunnen gepagineerd worden opgevraagd. Aan deze operaties kan telkens een pagina, een paginagrootte en een sortering worden meegegeven. In de resultaten is (naast de lijst van objecten) telkens een link aanwezig naar de vorige en de volgende pagina.  
-* Het MIM kenmerk [aggregatieType](https://docs.geostandaarden.nl/mim/mim/#metagegeven-aggregatietype) van een Relatiesoort bepaald of het target van de Relatiesoort integraal wordt "ingebed" in het JSON schema van zijn Objecttype of dat er alleen een verwijzing naar het target van de relatie wordt opgenomen. Als het aggregatieType de waarde "Compositie" of "Geen" heeft wordt het target van de relatie ingebed, als de waarde "Gedeeld" is wordt een link opgenomen.
+* Het MIM kenmerk [aggregatieType](https://docs.geostandaarden.nl/mim/mim/#metagegeven-aggregatietype) van een Relatiesoort bepaald of het target van de Relatiesoort integraal wordt "ingebed" in het JSON schema van zijn Objecttype of dat er alleen een verwijzing naar het target van de relatie wordt opgenomen. Als het aggregatieType de waarde "Compositie" of "Geen" heeft wordt het target van de relatie ingebed, als de waarde "Gedeeld" is wordt een link opgenomen. Zie ook [NLGov REST API Design Rules - Relationships](https://gitdocumentatie.logius.nl/publicatie/api/adr/2.0.2/#relationships).
 * Momenteel worden MIM Keuze modelelementen nog niet omgezet naar JSON schema `anyOf` constructies. In plaats daarvan wordt een Keuze tussen Attribuutsoorten of Relatiesoorten omgezet naar twee optionele key/values.     
 * De gebruikte response codes en error response schema's verwijzen momenteel naar de door VNG realisatie gedefinieerde codes in hun API-Kennisbank.
 
@@ -91,7 +92,8 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemo
 
 * `openapi.title`: De `title` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `naam` van het Informatiemodel gebruikt. 
 * `openapi.description`: De `description` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `definitie` van het Informatiemodel gebruikt.
-* `openapi.version`: De `versie` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Er is geen verstekwaarde voor deze tag.
+* `openapi.version`: De `versie` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Er is geen verstekwaarde voor deze tag. Voorbeeld '2.0.2'.
+* `openapi.pathVersion`:  Het versienummer dat wordt opgenomen als onderdeel van de url paden (bijvoorbeeld `https://api.example.org/v1/`). Dit moet een enkelvoudig nummer zijn zonder prefix 'v'. De verstekwaarde is '1'.  
 * `openapi.contact`: Het `contact` van de OpenAPI specificatie (zie [Contact Object](https://swagger.io/specification/#contact-object)). Er is geen verstekwaarde voor deze tag.
 * `openapi.license`: De `license` waaronder de OpenAPI specificatie wordt gepubliceerd zie [License Object](https://swagger.io/specification/#license-object)). Er is geen verstekwaarde voor deze tag. 
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund in de OpenAPI specificatie. Als bijvoorbeeld de GET method voor zowel items als collecties moet worden ondersteund, alsmede POST, PUT, DELETE, maar geen PATCH, dan moet de waarde van deze tag zijn: `getCol,getItem,post,put,delete`.  
