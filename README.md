@@ -44,7 +44,7 @@ Imvertor ondersteund tevens het genereren van Java code uit een [MIM versie 1.2]
 * Een verzameling Java resource classes die elk een aantal method/operaties op één (niet abstract) Objecttype bevatten. Standaard worden alle [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operaties voor dat Objecttype gegenereerd (zie ook [Kenmerken van de gegenereerde OpenAPI specificatie](#kenmerken-van-de-gegenereerde-openapi-specificatie)). 
 * Een property file met daarin metagegevens uit het MIM model in een voor het Java project leesbare vorm (zoals de titel, omschrijving, versie en contactpersonen)
 
-In de betreffende Imvertor processing mode of the default properties file moeten de volgende properties zijn gezet om Java code te genereren:
+In de betreffende Imvertor processing mode of the default properties file moeten de volgende properties zijn geconfigureerd om Java code te genereren:
 
 * `createsourcecode = yes`
 * `sourcecodetypes  = java-openapi`
@@ -70,7 +70,7 @@ En voor het genereren van een OpenAPI versie 3.1.0 specificatie:
 
 Dit commando genereert niet alleen de OpenAPI specificatie, maar valideert deze ook. De resultaten van de validatie worden op het scherm getoond maar ook weggeschreven in de log file `imvertor-openapi-gnerator.log`.
 
-Imvertor SaaS voert het samenvoegen (stap 3) en het genereren van de OpenAPI specificatie (stap 4) automatisch uit en voegt de gegenereerde OpenAPI specificatie toe aan het resultaat .zip bestand. In de betreffende Imvertor processing mode of the default properties file moet daartoe de volgende property zijn gezet:
+Imvertor SaaS voert het samenvoegen (stap 3) en het genereren van de OpenAPI specificatie (stap 4) automatisch uit en voegt de gegenereerde OpenAPI specificatie toe aan het resultaat .zip bestand. In de betreffende Imvertor processing mode of the default properties file moet daartoe de volgende property zijn geconfigureerd:
 
 * `createopenapi = yes`
 
