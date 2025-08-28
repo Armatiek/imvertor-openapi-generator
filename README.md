@@ -109,12 +109,12 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemo
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund in de OpenAPI specificatie. Als bijvoorbeeld de GET method voor zowel items als collecties moet worden ondersteund, alsmede POST, PUT, DELETE, maar geen PATCH, dan moet de waarde van deze tag zijn: `getCol,getItem,post,put,delete`.  
 * `openapi.pathVersion`:  Het versienummer dat wordt opgenomen als onderdeel van de url paden (bijvoorbeeld `https://api.example.org/v1/`). Dit moet een enkelvoudig nummer zijn zonder punten (geen semver) en zonder prefix 'v'. De verstekwaarde is '1'.
 * `openapi.openAPIVersion`: De versie van de OpenAPI specificatie die moet worden gegenereerd, versie '3.0.1' of '3.1.0'. De verstekwaarde is '3.0.1'.
-* `openapi.getCol.errorResponses`: De gewenste error response HTTP codes van GET methods van collecties, bijvoorbeeld '400,401,403,404,409,410,415,429,500,501,503'. 
-* `openapi.getItem.errorResponses`: Idem voor de GET methods van items.
-* `openapi.post.errorResponses`: Idem voor de POST methods.
-* `openapi.delete.errorResponses`: Idem voor de DELETE methods.
-* `openapi.put.errorResponses`:  Idem voor de PUT methods.
-* `openapi.patch.errorResponses`: Idem voor de PATCH methods.
+* `openapi.getCol.responseCodes`: De gewenste response HTTP codes van GET methods van collecties. De verstekwaarde is '200,400,401,403,404,405,415,429,500,503'.
+* `openapi.getItem.responseCodes`: Idem voor de GET methods van items. De verstekwaarde is '200,400,401,403,404,405,415,429,500,503'.
+* `openapi.post.responseCodes`: Idem voor de POST methods. De verstekwaarde is '201,400,401,403,405,409,415,422,429,500,503'
+* `openapi.delete.responseCodes`: Idem voor de DELETE methods. De verstekwaarde is '200,204,401,403,404,405,409,415,429,500,503'
+* `openapi.put.responseCodes`:  Idem voor de PUT methods. De verstekwaarde is '200,201,204,400,401,403,404,405,409,415,429,500,503'
+* `openapi.patch.responseCodes`: Idem voor de PATCH methods. De verstekwaarde is '200,204,400,401,403,404,405,409,415,422,429,500,503'
 
 Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype" en van toepasssing zijn op individuele Objecttypen:
 
