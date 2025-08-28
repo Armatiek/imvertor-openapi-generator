@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * <p>Een persoon of instelling waar mee wordt gecommuniceerd.</p>
  */
-@Keuze(fieldNames = {"betalingBank", "betalingCredit"} , message = "Exactly one of betalingBank, betalingCredit must be non-zero")
+@Keuze(fieldNames = {"betalingBankBankrekening", "betalingCreditCreditcard"} , message = "Exactly one of betalingBankBankrekening, betalingCreditCreditcard must be non-zero")
 @Schema(description = "Een persoon of instelling waar mee wordt gecommuniceerd.")
 public abstract class Contact {
 
@@ -32,14 +32,14 @@ public abstract class Contact {
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Een contact doet een betaling met een betaalmiddel.", requiredMode = RequiredMode.REQUIRED)
-  private List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBank;
+  private List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBankBankrekening;
 
   /**
    * <p>Een contact doet een betaling met een betaalmiddel.</p>
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Een contact doet een betaling met een betaalmiddel.", requiredMode = RequiredMode.REQUIRED)
-  private List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCredit;
+  private List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCreditCreditcard;
 
   public String getNaam() {
     return naam;
@@ -57,20 +57,20 @@ public abstract class Contact {
     this.postadres = postadres;
   }
 
-  public List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> getBetalingBank() {
-    return betalingBank;
+  public List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> getBetalingBankBankrekening() {
+    return betalingBankBankrekening;
   }
 
-  public void setBetalingBank(List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBank) {
-    this.betalingBank = betalingBank;
+  public void setBetalingBankBankrekening(List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBankBankrekening) {
+    this.betalingBankBankrekening = betalingBankBankrekening;
   }
 
-  public List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> getBetalingCredit() {
-    return betalingCredit;
+  public List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> getBetalingCreditCreditcard() {
+    return betalingCreditCreditcard;
   }
 
-  public void setBetalingCredit(List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCredit) {
-    this.betalingCredit = betalingCredit;
+  public void setBetalingCreditCreditcard(List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCreditCreditcard) {
+    this.betalingCreditCreditcard = betalingCreditCreditcard;
   }
 
 }

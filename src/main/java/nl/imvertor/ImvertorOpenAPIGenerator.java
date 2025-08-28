@@ -40,7 +40,7 @@ public class ImvertorOpenAPIGenerator {
     
     List<Server> servers = new ArrayList<Server>();
     
-    String title = properties.getProperty("openapi.description", "No title");
+    String title = properties.getProperty("openapi.title", "No title");
     String description = properties.getProperty("openapi.description", null);
     String version = properties.getProperty("openapi.version", "1.0.0");
     String contact = properties.getProperty("openapi.contact", null);
@@ -131,7 +131,7 @@ public class ImvertorOpenAPIGenerator {
   public static void main(String[] args) {
     if (args.length == 0) {
       logger.info("Please specify the output path of the OpenAPI yaml file as the first argument");
-      logger.info("Please optionally specify \"api31\" as the second argument if you want to generate an OpenAPI specification version 3.1.0");
+      logger.info("And optionally specify \"api31\" as the second argument if you want to generate an OpenAPI specification version 3.1.0");
       return;
     }
     try {

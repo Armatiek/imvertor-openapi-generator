@@ -81,21 +81,21 @@ public abstract class Fiets {
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Een fiets kan zijn aangestuurd door een motor. Wanneer electrische fiets, dan spreken we over \"aansturing door Batterij\".", requiredMode = RequiredMode.NOT_REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoor;
+  private nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoorBatterij;
 
   /**
    * <p>De Fiets is geleverd door een Leverancier. </p>
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "De Fiets is geleverd door een Leverancier.", requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoor;
+  private nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoorLeverancier;
 
   /**
    * <p>Overdracht van geld heeft plaatsgevonden waarmee een relatie is opgebouwd met de <strong>Klant</strong>, w.o. garantieverplichtingen.</p>
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Overdracht van geld heeft plaatsgevonden waarmee een relatie is opgebouwd met de Klant , w.o. garantieverplichtingen.", requiredMode = RequiredMode.NOT_REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAan;
+  private nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAanKlant;
 
   public String getId() {
     return id;
@@ -169,28 +169,28 @@ public abstract class Fiets {
     this.snaaraandrijving = snaaraandrijving;
   }
 
-  public nl.imvertor.model.fietsenwinkel.inventaris.Batterij getAangestuurdDoor() {
-    return aangestuurdDoor;
+  public nl.imvertor.model.fietsenwinkel.inventaris.Batterij getAangestuurdDoorBatterij() {
+    return aangestuurdDoorBatterij;
   }
 
-  public void setAangestuurdDoor(nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoor) {
-    this.aangestuurdDoor = aangestuurdDoor;
+  public void setAangestuurdDoorBatterij(nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoorBatterij) {
+    this.aangestuurdDoorBatterij = aangestuurdDoorBatterij;
   }
 
-  public nl.imvertor.model.fietsenwinkel.contacten.Leverancier getGeleverdDoor() {
-    return geleverdDoor;
+  public nl.imvertor.model.fietsenwinkel.contacten.Leverancier getGeleverdDoorLeverancier() {
+    return geleverdDoorLeverancier;
   }
 
-  public void setGeleverdDoor(nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoor) {
-    this.geleverdDoor = geleverdDoor;
+  public void setGeleverdDoorLeverancier(nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoorLeverancier) {
+    this.geleverdDoorLeverancier = geleverdDoorLeverancier;
   }
 
-  public nl.imvertor.model.fietsenwinkel.contacten.Klant getVerkochtAan() {
-    return verkochtAan;
+  public nl.imvertor.model.fietsenwinkel.contacten.Klant getVerkochtAanKlant() {
+    return verkochtAanKlant;
   }
 
-  public void setVerkochtAan(nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAan) {
-    this.verkochtAan = verkochtAan;
+  public void setVerkochtAanKlant(nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAanKlant) {
+    this.verkochtAanKlant = verkochtAanKlant;
   }
 
 }

@@ -5,6 +5,7 @@ import javax.ws.rs.core.*;
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.headers.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.constraints.Min;
@@ -12,17 +13,18 @@ import jakarta.validation.constraints.Min;
 import nl.imvertor.model.fietsenwinkel.personen.Persoon;
 import nl.imvertor.model.fietsenwinkel.personen.PaginatedPersoonList;
 
-@Path("/persoon")
+@Path("/v1/persoon")
 @Tag(name = "Persoon", description = "Een natuurlijk persoon.")
 public class PersoonResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get all Persoon objects", description = "Retrieves a paginated list of all Persoon objects")
+  @Operation(summary = "Retourneert de lijst van alle Persoon objecten", description = "Retourneert een gepagineerde lijst van alle Persoon objecten")
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "OK",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = PaginatedPersoonList.class))),
+      schema = @Schema(implementation = PaginatedPersoonList.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -37,17 +39,17 @@ public class PersoonResource {
   public Response getAllPersoon(
     @QueryParam("page")
     @DefaultValue("0")
-    @Parameter(description = "Page number (0-based)", example = "0")
+    @Parameter(description = "Pagina nummer (beginnend bij 0)", example = "0")
     @Min(0) int page,
 
     @QueryParam("size")
     @DefaultValue("20")
-    @Parameter(description = "Number of items per page", example = "20")
+    @Parameter(description = "Aantal objecten per pagina", example = "20")
     @Min(1) int size,
 
     @QueryParam("sort")
     @DefaultValue("id")
-    @Parameter(description = "Field to sort by", example = "name")
+    @Parameter(description = "Sorteer veld", example = "name")
     String sortBy) {
     return Response.ok().build();
   }
@@ -55,11 +57,13 @@ public class PersoonResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Create a new Persoon", description = "Creates a new Persoon with the provided information")
+  @Operation(summary = "Maakt een nieuw Persoon object", description = "Maakt een nieuw Persoon object aan op basis van de aangeleverde gegevens")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "201", description = "Persoon created successfully",
+    @ApiResponse(responseCode = "201", description = "Persoon succesvol aangemaakt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Persoon.class))),
+      schema = @Schema(implementation = Persoon.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -71,15 +75,16 @@ public class PersoonResource {
     @ApiResponse(responseCode = "501", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/501"),
     @ApiResponse(responseCode = "503", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/503")
   })
-  public Response createPersoon(@Parameter(description = "Persoon creation data", required = true) Persoon persoon) {
+  public Response createPersoon(@Parameter(description = "De gegevens van het Persoon object", required = true) Persoon persoon) {
     return Response.ok().build();
   }
 
   @DELETE
   @Path("/{id}")
-  @Operation(summary = "Delete Persoon", description = "Permanently deletes a Persoon from the system")
+  @Operation(summary = "Verwijderd een Persoon object", description = "Verwijderd een specifiek Persoon object permanent uit het systeem")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "204", description = "Persoon deleted successfully"),
+    @ApiResponse(responseCode = "204", description = "Persoon object succesvol verwijderd",
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -99,11 +104,12 @@ public class PersoonResource {
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get Persoon by id", description = "Retrieves a specific Persoon by their unique identifier")
+  @Operation(summary = "Retourneert een Persoon object op basis van zijn unieke identificatie", description = "Retourneert een individueel Persoon object op basis van zijn unieke identificatie")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Persoon was found",
+    @ApiResponse(responseCode = "200", description = "Persoon was gevonden",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Persoon.class))),
+      schema = @Schema(implementation = Persoon.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -124,11 +130,13 @@ public class PersoonResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Update Persoon", description = "Completely updates a Persoon with new information (replaces all fields)")
+  @Operation(summary = "Maakt nieuw of overschrijft bestaand Persoon object", description = "Maakt een nieuw of overschrijft (volledig) een bestaand Persoon object")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Persoon updated successfully",
+    @ApiResponse(responseCode = "200", description = "Persoon object succesvol aangemaakt/overschreven",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Persoon.class))),
+      schema = @Schema(implementation = Persoon.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -151,11 +159,12 @@ public class PersoonResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Partially update Persoon", description = "Partially updates a Persoon by modifying only the provided fields")
+  @Operation(summary = "Werkt een bestaand Persoon object gedeeltelijk bij", description = "Werkt een bestaand Persoon object gedeeltelijk bij door alleen de aangeleverde velden te overschrijven")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Persoon updated successfully",
+    @ApiResponse(responseCode = "200", description = "Persoon succesvol bijgewerkt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Persoon.class))),
+      schema = @Schema(implementation = Persoon.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),

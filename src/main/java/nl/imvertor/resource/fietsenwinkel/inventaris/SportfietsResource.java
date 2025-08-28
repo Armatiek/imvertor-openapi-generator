@@ -5,6 +5,7 @@ import javax.ws.rs.core.*;
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.headers.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.constraints.Min;
@@ -12,17 +13,18 @@ import jakarta.validation.constraints.Min;
 import nl.imvertor.model.fietsenwinkel.inventaris.Sportfiets;
 import nl.imvertor.model.fietsenwinkel.inventaris.PaginatedSportfietsList;
 
-@Path("/sportfiets")
+@Path("/v1/sportfiets")
 @Tag(name = "Sportfiets", description = "Een fiets bedoeld voor gebruik in sportieve toepassingen.")
 public class SportfietsResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get all Sportfiets objects", description = "Retrieves a paginated list of all Sportfiets objects")
+  @Operation(summary = "Retourneert de lijst van alle Sportfiets objecten", description = "Retourneert een gepagineerde lijst van alle Sportfiets objecten")
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "OK",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = PaginatedSportfietsList.class))),
+      schema = @Schema(implementation = PaginatedSportfietsList.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -37,17 +39,17 @@ public class SportfietsResource {
   public Response getAllSportfiets(
     @QueryParam("page")
     @DefaultValue("0")
-    @Parameter(description = "Page number (0-based)", example = "0")
+    @Parameter(description = "Pagina nummer (beginnend bij 0)", example = "0")
     @Min(0) int page,
 
     @QueryParam("size")
     @DefaultValue("20")
-    @Parameter(description = "Number of items per page", example = "20")
+    @Parameter(description = "Aantal objecten per pagina", example = "20")
     @Min(1) int size,
 
     @QueryParam("sort")
     @DefaultValue("id")
-    @Parameter(description = "Field to sort by", example = "name")
+    @Parameter(description = "Sorteer veld", example = "name")
     String sortBy) {
     return Response.ok().build();
   }
@@ -55,11 +57,13 @@ public class SportfietsResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Create a new Sportfiets", description = "Creates a new Sportfiets with the provided information")
+  @Operation(summary = "Maakt een nieuw Sportfiets object", description = "Maakt een nieuw Sportfiets object aan op basis van de aangeleverde gegevens")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "201", description = "Sportfiets created successfully",
+    @ApiResponse(responseCode = "201", description = "Sportfiets succesvol aangemaakt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Sportfiets.class))),
+      schema = @Schema(implementation = Sportfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -71,15 +75,16 @@ public class SportfietsResource {
     @ApiResponse(responseCode = "501", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/501"),
     @ApiResponse(responseCode = "503", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/503")
   })
-  public Response createSportfiets(@Parameter(description = "Sportfiets creation data", required = true) Sportfiets sportfiets) {
+  public Response createSportfiets(@Parameter(description = "De gegevens van het Sportfiets object", required = true) Sportfiets sportfiets) {
     return Response.ok().build();
   }
 
   @DELETE
   @Path("/{id}")
-  @Operation(summary = "Delete Sportfiets", description = "Permanently deletes a Sportfiets from the system")
+  @Operation(summary = "Verwijderd een Sportfiets object", description = "Verwijderd een specifiek Sportfiets object permanent uit het systeem")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "204", description = "Sportfiets deleted successfully"),
+    @ApiResponse(responseCode = "204", description = "Sportfiets object succesvol verwijderd",
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -99,11 +104,12 @@ public class SportfietsResource {
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get Sportfiets by id", description = "Retrieves a specific Sportfiets by their unique identifier")
+  @Operation(summary = "Retourneert een Sportfiets object op basis van zijn unieke identificatie", description = "Retourneert een individueel Sportfiets object op basis van zijn unieke identificatie")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Sportfiets was found",
+    @ApiResponse(responseCode = "200", description = "Sportfiets was gevonden",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Sportfiets.class))),
+      schema = @Schema(implementation = Sportfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -124,11 +130,13 @@ public class SportfietsResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Update Sportfiets", description = "Completely updates a Sportfiets with new information (replaces all fields)")
+  @Operation(summary = "Maakt nieuw of overschrijft bestaand Sportfiets object", description = "Maakt een nieuw of overschrijft (volledig) een bestaand Sportfiets object")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Sportfiets updated successfully",
+    @ApiResponse(responseCode = "200", description = "Sportfiets object succesvol aangemaakt/overschreven",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Sportfiets.class))),
+      schema = @Schema(implementation = Sportfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -151,11 +159,12 @@ public class SportfietsResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Partially update Sportfiets", description = "Partially updates a Sportfiets by modifying only the provided fields")
+  @Operation(summary = "Werkt een bestaand Sportfiets object gedeeltelijk bij", description = "Werkt een bestaand Sportfiets object gedeeltelijk bij door alleen de aangeleverde velden te overschrijven")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Sportfiets updated successfully",
+    @ApiResponse(responseCode = "200", description = "Sportfiets succesvol bijgewerkt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Sportfiets.class))),
+      schema = @Schema(implementation = Sportfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),

@@ -5,6 +5,7 @@ import javax.ws.rs.core.*;
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.headers.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.constraints.Min;
@@ -12,17 +13,18 @@ import jakarta.validation.constraints.Min;
 import nl.imvertor.model.fietsenwinkel.inventaris.Batterij;
 import nl.imvertor.model.fietsenwinkel.inventaris.PaginatedBatterijList;
 
-@Path("/batterij")
+@Path("/v1/batterij")
 @Tag(name = "Batterij", description = "De batterij van de E-Bike.")
 public class BatterijResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get all Batterij objects", description = "Retrieves a paginated list of all Batterij objects")
+  @Operation(summary = "Retourneert de lijst van alle Batterij objecten", description = "Retourneert een gepagineerde lijst van alle Batterij objecten")
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "OK",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = PaginatedBatterijList.class))),
+      schema = @Schema(implementation = PaginatedBatterijList.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -37,17 +39,17 @@ public class BatterijResource {
   public Response getAllBatterij(
     @QueryParam("page")
     @DefaultValue("0")
-    @Parameter(description = "Page number (0-based)", example = "0")
+    @Parameter(description = "Pagina nummer (beginnend bij 0)", example = "0")
     @Min(0) int page,
 
     @QueryParam("size")
     @DefaultValue("20")
-    @Parameter(description = "Number of items per page", example = "20")
+    @Parameter(description = "Aantal objecten per pagina", example = "20")
     @Min(1) int size,
 
     @QueryParam("sort")
     @DefaultValue("id")
-    @Parameter(description = "Field to sort by", example = "name")
+    @Parameter(description = "Sorteer veld", example = "name")
     String sortBy) {
     return Response.ok().build();
   }
@@ -55,11 +57,13 @@ public class BatterijResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Create a new Batterij", description = "Creates a new Batterij with the provided information")
+  @Operation(summary = "Maakt een nieuw Batterij object", description = "Maakt een nieuw Batterij object aan op basis van de aangeleverde gegevens")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "201", description = "Batterij created successfully",
+    @ApiResponse(responseCode = "201", description = "Batterij succesvol aangemaakt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Batterij.class))),
+      schema = @Schema(implementation = Batterij.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -71,15 +75,16 @@ public class BatterijResource {
     @ApiResponse(responseCode = "501", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/501"),
     @ApiResponse(responseCode = "503", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/503")
   })
-  public Response createBatterij(@Parameter(description = "Batterij creation data", required = true) Batterij batterij) {
+  public Response createBatterij(@Parameter(description = "De gegevens van het Batterij object", required = true) Batterij batterij) {
     return Response.ok().build();
   }
 
   @DELETE
   @Path("/{id}")
-  @Operation(summary = "Delete Batterij", description = "Permanently deletes a Batterij from the system")
+  @Operation(summary = "Verwijderd een Batterij object", description = "Verwijderd een specifiek Batterij object permanent uit het systeem")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "204", description = "Batterij deleted successfully"),
+    @ApiResponse(responseCode = "204", description = "Batterij object succesvol verwijderd",
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -99,11 +104,12 @@ public class BatterijResource {
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get Batterij by id", description = "Retrieves a specific Batterij by their unique identifier")
+  @Operation(summary = "Retourneert een Batterij object op basis van zijn unieke identificatie", description = "Retourneert een individueel Batterij object op basis van zijn unieke identificatie")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Batterij was found",
+    @ApiResponse(responseCode = "200", description = "Batterij was gevonden",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Batterij.class))),
+      schema = @Schema(implementation = Batterij.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -124,11 +130,13 @@ public class BatterijResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Update Batterij", description = "Completely updates a Batterij with new information (replaces all fields)")
+  @Operation(summary = "Maakt nieuw of overschrijft bestaand Batterij object", description = "Maakt een nieuw of overschrijft (volledig) een bestaand Batterij object")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Batterij updated successfully",
+    @ApiResponse(responseCode = "200", description = "Batterij object succesvol aangemaakt/overschreven",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Batterij.class))),
+      schema = @Schema(implementation = Batterij.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -151,11 +159,12 @@ public class BatterijResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Partially update Batterij", description = "Partially updates a Batterij by modifying only the provided fields")
+  @Operation(summary = "Werkt een bestaand Batterij object gedeeltelijk bij", description = "Werkt een bestaand Batterij object gedeeltelijk bij door alleen de aangeleverde velden te overschrijven")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Batterij updated successfully",
+    @ApiResponse(responseCode = "200", description = "Batterij succesvol bijgewerkt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Batterij.class))),
+      schema = @Schema(implementation = Batterij.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),

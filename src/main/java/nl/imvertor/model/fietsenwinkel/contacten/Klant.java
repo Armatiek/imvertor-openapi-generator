@@ -24,7 +24,7 @@ public class Klant extends nl.imvertor.model.fietsenwinkel.contacten.Contact {
    * ExterneKoppeling -> Objecttype
    */
   @Schema(requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.personen.Persoon betreft;
+  private nl.imvertor.model.fietsenwinkel.personen.Persoon betreftPersoon;
 
   public Boolean isNieuwsbrief() {
     return nieuwsbrief;
@@ -34,12 +34,12 @@ public class Klant extends nl.imvertor.model.fietsenwinkel.contacten.Contact {
     this.nieuwsbrief = nieuwsbrief;
   }
 
-  public nl.imvertor.model.fietsenwinkel.personen.Persoon getBetreft() {
-    return betreft;
+  public nl.imvertor.model.fietsenwinkel.personen.Persoon getBetreftPersoon() {
+    return betreftPersoon;
   }
 
-  public void setBetreft(nl.imvertor.model.fietsenwinkel.personen.Persoon betreft) {
-    this.betreft = betreft;
+  public void setBetreftPersoon(nl.imvertor.model.fietsenwinkel.personen.Persoon betreftPersoon) {
+    this.betreftPersoon = betreftPersoon;
   }
 
 }

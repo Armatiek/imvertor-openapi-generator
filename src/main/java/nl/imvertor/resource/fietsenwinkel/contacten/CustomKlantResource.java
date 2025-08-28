@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import nl.imvertor.model.fietsenwinkel.contacten.PaginatedKlantList;
 
-@Path("/klant")
+@Path("/v1/klant")
 @Tag(name = "Klant", description = "Een persoon die een fiets heeft gekocht.")
 public class CustomKlantResource {
 
@@ -28,7 +29,9 @@ public class CustomKlantResource {
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "OK",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = PaginatedKlantList.class))),
+      schema = @Schema(implementation = PaginatedKlantList.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"), 
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),

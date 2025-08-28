@@ -8,7 +8,7 @@
   <groupId>nl.armatiek.imvertor</groupId>
   <artifactId>imvertor-openapi-generator</artifactId>
   <version>0.9.0</version>
-  <name>Java classes to OpenAPI convertor</name>
+  <name>Imvertor OpenAPI generator</name>
   <inceptionYear>2025</inceptionYear>
   <description> 
   </description>

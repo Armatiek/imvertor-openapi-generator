@@ -39,7 +39,7 @@ public class Winkel {
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "De handelswaar van een fietsenwinkel.", requiredMode = RequiredMode.NOT_REQUIRED)
-  private List<nl.imvertor.model.fietsenwinkel.inventaris.Fiets> verhandelt;
+  private List<nl.imvertor.model.fietsenwinkel.inventaris.Fiets> verhandeltFiets;
 
   public String getNaam() {
     return naam;
@@ -65,12 +65,12 @@ public class Winkel {
     this.vlak = vlak;
   }
 
-  public List<nl.imvertor.model.fietsenwinkel.inventaris.Fiets> getVerhandelt() {
-    return verhandelt;
+  public List<nl.imvertor.model.fietsenwinkel.inventaris.Fiets> getVerhandeltFiets() {
+    return verhandeltFiets;
   }
 
-  public void setVerhandelt(List<nl.imvertor.model.fietsenwinkel.inventaris.Fiets> verhandelt) {
-    this.verhandelt = verhandelt;
+  public void setVerhandeltFiets(List<nl.imvertor.model.fietsenwinkel.inventaris.Fiets> verhandeltFiets) {
+    this.verhandeltFiets = verhandeltFiets;
   }
 
 }

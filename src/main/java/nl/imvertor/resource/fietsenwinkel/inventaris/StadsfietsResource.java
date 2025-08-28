@@ -5,6 +5,7 @@ import javax.ws.rs.core.*;
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.headers.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import jakarta.validation.constraints.Min;
@@ -12,17 +13,18 @@ import jakarta.validation.constraints.Min;
 import nl.imvertor.model.fietsenwinkel.inventaris.Stadsfiets;
 import nl.imvertor.model.fietsenwinkel.inventaris.PaginatedStadsfietsList;
 
-@Path("/stadsfiets")
+@Path("/v1/stadsfiets")
 @Tag(name = "Stadsfiets", description = "Een fiets die is ingericht op gebruik in het stadsverkeer.")
 public class StadsfietsResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get all Stadsfiets objects", description = "Retrieves a paginated list of all Stadsfiets objects")
+  @Operation(summary = "Retourneert de lijst van alle Stadsfiets objecten", description = "Retourneert een gepagineerde lijst van alle Stadsfiets objecten")
   @ApiResponses(value = {
     @ApiResponse(responseCode = "200", description = "OK",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = PaginatedStadsfietsList.class))),
+      schema = @Schema(implementation = PaginatedStadsfietsList.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -37,17 +39,17 @@ public class StadsfietsResource {
   public Response getAllStadsfiets(
     @QueryParam("page")
     @DefaultValue("0")
-    @Parameter(description = "Page number (0-based)", example = "0")
+    @Parameter(description = "Pagina nummer (beginnend bij 0)", example = "0")
     @Min(0) int page,
 
     @QueryParam("size")
     @DefaultValue("20")
-    @Parameter(description = "Number of items per page", example = "20")
+    @Parameter(description = "Aantal objecten per pagina", example = "20")
     @Min(1) int size,
 
     @QueryParam("sort")
     @DefaultValue("id")
-    @Parameter(description = "Field to sort by", example = "name")
+    @Parameter(description = "Sorteer veld", example = "name")
     String sortBy) {
     return Response.ok().build();
   }
@@ -55,11 +57,13 @@ public class StadsfietsResource {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Create a new Stadsfiets", description = "Creates a new Stadsfiets with the provided information")
+  @Operation(summary = "Maakt een nieuw Stadsfiets object", description = "Maakt een nieuw Stadsfiets object aan op basis van de aangeleverde gegevens")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "201", description = "Stadsfiets created successfully",
+    @ApiResponse(responseCode = "201", description = "Stadsfiets succesvol aangemaakt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Stadsfiets.class))),
+      schema = @Schema(implementation = Stadsfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -71,15 +75,16 @@ public class StadsfietsResource {
     @ApiResponse(responseCode = "501", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/501"),
     @ApiResponse(responseCode = "503", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/503")
   })
-  public Response createStadsfiets(@Parameter(description = "Stadsfiets creation data", required = true) Stadsfiets stadsfiets) {
+  public Response createStadsfiets(@Parameter(description = "De gegevens van het Stadsfiets object", required = true) Stadsfiets stadsfiets) {
     return Response.ok().build();
   }
 
   @DELETE
   @Path("/{id}")
-  @Operation(summary = "Delete Stadsfiets", description = "Permanently deletes a Stadsfiets from the system")
+  @Operation(summary = "Verwijderd een Stadsfiets object", description = "Verwijderd een specifiek Stadsfiets object permanent uit het systeem")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "204", description = "Stadsfiets deleted successfully"),
+    @ApiResponse(responseCode = "204", description = "Stadsfiets object succesvol verwijderd",
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -99,11 +104,12 @@ public class StadsfietsResource {
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Get Stadsfiets by id", description = "Retrieves a specific Stadsfiets by their unique identifier")
+  @Operation(summary = "Retourneert een Stadsfiets object op basis van zijn unieke identificatie", description = "Retourneert een individueel Stadsfiets object op basis van zijn unieke identificatie")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Stadsfiets was found",
+    @ApiResponse(responseCode = "200", description = "Stadsfiets was gevonden",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Stadsfiets.class))),
+      schema = @Schema(implementation = Stadsfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -124,11 +130,13 @@ public class StadsfietsResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Update Stadsfiets", description = "Completely updates a Stadsfiets with new information (replaces all fields)")
+  @Operation(summary = "Maakt nieuw of overschrijft bestaand Stadsfiets object", description = "Maakt een nieuw of overschrijft (volledig) een bestaand Stadsfiets object")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Stadsfiets updated successfully",
+    @ApiResponse(responseCode = "200", description = "Stadsfiets object succesvol aangemaakt/overschreven",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Stadsfiets.class))),
+      schema = @Schema(implementation = Stadsfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version"),
+        @Header(name = "Location", description = "URI van het opgeslagen object", schema = @Schema(type = "string", format = "uri"))}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
@@ -151,11 +159,12 @@ public class StadsfietsResource {
   @Path("/{id}")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  @Operation(summary = "Partially update Stadsfiets", description = "Partially updates a Stadsfiets by modifying only the provided fields")
+  @Operation(summary = "Werkt een bestaand Stadsfiets object gedeeltelijk bij", description = "Werkt een bestaand Stadsfiets object gedeeltelijk bij door alleen de aangeleverde velden te overschrijven")
   @ApiResponses(value = {
-    @ApiResponse(responseCode = "200", description = "Stadsfiets updated successfully",
+    @ApiResponse(responseCode = "200", description = "Stadsfiets succesvol bijgewerkt",
       content = @Content(mediaType = "application/json",
-      schema = @Schema(implementation = Stadsfiets.class))),
+      schema = @Schema(implementation = Stadsfiets.class)),
+      headers = {@Header(name = "api-version", ref = "https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/headers/api_version")}),
     @ApiResponse(responseCode = "400", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/400"),
     @ApiResponse(responseCode = "401", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/401"),
     @ApiResponse(responseCode = "403", ref="https://raw.githubusercontent.com/VNG-Realisatie/API-Kennisbank/master/common/common.yaml#/components/responses/403"),
