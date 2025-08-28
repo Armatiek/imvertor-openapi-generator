@@ -99,7 +99,7 @@ De gegenereerde OpenAPI specificatie heeft de volgende kenmerken:
 ## Configuratie mogelijkheden
 Het genereren van een OpenAPI specificatie kan met de Imvertor OpenAPI generator in principe gedaan worden zonder extra (meta)modellen en/of configuratie. Via het toevoegen van specifieke tags aan het MIM informatiemodel in Enterprise Architect kan er echter invloed worden uitgeoefend op het standaard gedrag van de generator:
 
-Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemodel":
+Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemodel" en van toepassing zijn op het gehele model:
 
 * `openapi.title`: De `title` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `naam` van het Informatiemodel gebruikt. 
 * `openapi.description`: De `description` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `definitie` van het Informatiemodel gebruikt.
@@ -116,7 +116,7 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemo
 * `openapi.put.errorResponses`:  Idem voor de PUT methods.
 * `openapi.patch.errorResponses`: Idem voor de PATCH methods.
 
-Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype":
+Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype" en van toepasssing zijn op individuele Objecttypen:
 
 * `openapi.expose`: Via deze tag kan worden aangegeven of endpoints voor dit Objecttype beschikbaar moeten worden gemaakt in de OpenAPI specificatie of niet ("true" of "false", default "true").
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund voor dit Objecttype in de OpenAPI specificatie (bijvoorbeeld `getCol,getItem,post,put,delete`).              
