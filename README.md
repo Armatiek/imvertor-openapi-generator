@@ -109,12 +109,12 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemo
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund in de OpenAPI specificatie. Als bijvoorbeeld de GET method voor zowel items als collecties moet worden ondersteund, alsmede POST, PUT, DELETE, maar geen PATCH, dan moet de waarde van deze tag zijn: `getCol,getItem,post,put,delete`.  
 * `openapi.pathVersion`:  Het versienummer dat wordt opgenomen als onderdeel van de url paden (bijvoorbeeld `https://api.example.org/v1/`). Dit moet een enkelvoudig nummer zijn zonder punten (geen semver) en zonder prefix 'v'. De verstekwaarde is '1'.
 * `openapi.openAPIVersion`: De versie van de OpenAPI specificatie die moet worden gegenereerd, versie '3.0.1' of '3.1.0'. De verstekwaarde is '3.0.1'.
-* `openapi.getCol.errorResponses`: De gewenste error response HTTP codes van de operation voor de GET method van collecties, bijvoorbeeld '400,401,403,404,409,410,415,429,500,501,503'. 
-* `openapi.getItem.errorResponses`: Idem voor de GET method van items.
-* `openapi.post.errorResponses`: Idem voor de POST method.
-* `openapi.delete.errorResponses`: Idem voor de DELETE method.
-* `openapi.put.errorResponses`:  Idem voor de PUT method.
-* `openapi.patch.errorResponses`: Idem voor de PATCH method.
+* `openapi.getCol.errorResponses`: De gewenste error response HTTP codes van GET methods van collecties, bijvoorbeeld '400,401,403,404,409,410,415,429,500,501,503'. 
+* `openapi.getItem.errorResponses`: Idem voor de GET methods van items.
+* `openapi.post.errorResponses`: Idem voor de POST methods.
+* `openapi.delete.errorResponses`: Idem voor de DELETE methods.
+* `openapi.put.errorResponses`:  Idem voor de PUT methods.
+* `openapi.patch.errorResponses`: Idem voor de PATCH methods.
 
 Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype":
 
