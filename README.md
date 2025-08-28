@@ -122,11 +122,11 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype" 
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund voor dit Objecttype in de OpenAPI specificatie (bijvoorbeeld `getCol,getItem,post,put,delete`).              
 * `openapi.path`: Het path van het endpoint voor dit Objecttype, bijvoorbeeld `klanten` (zie [Paths Object](https://swagger.io/specification/#paths-object)).
 * `openapi.getCol.operationId`: De id van de operation voor de GET method van collecties voor dit Objecttype (zie [Path Item Object](https://swagger.io/specification/#path-item-object)).
-* `openapi.getItem.errorResponses`: Idem voor de GET method van items.
-* `openapi.post.errorResponses`: Idem voor de POST method.
-* `openapi.delete.errorResponses`: Idem voor de DELETE method.
-* `openapi.put.errorResponses`:  Idem voor de PUT method.
-* `openapi.patch.errorResponses`: Idem voor de PATCH method.
+* `openapi.getItem.operationId`: Idem voor de GET method van items.
+* `openapi.post.operationId`: Idem voor de POST method.
+* `openapi.delete.operationId`: Idem voor de DELETE method.
+* `openapi.put.operationId`:  Idem voor de PUT method.
+* `openapi.patch.operationId`: Idem voor de PATCH method.
 
 ## Voorbeeld OpenAPI specificatie
 Zie [Fietsenwinkel OpenAPI specificatie](https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) voor een voorbeeld OpenAPI specificatie dat is gegenereerd via deze methode. Dit voorbeeld bevat ook de custom GET collectie method op Klant objecten. 
