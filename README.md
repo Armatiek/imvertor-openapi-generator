@@ -2,7 +2,7 @@
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 De "Imvertor OpenAPI generator" is een voorziening waarmee [OpenAPI](https://swagger.io/specification/) specificaties kunnen worden gegenereerd op basis van andere resultaten die door [Imvertor](https://github.com/Imvertor/Imvertor-Maven) worden opgeleverd, met name de MIM XML serialisatie en Java code. De Imvertor OpenAPI generator kan worden gezien als een alternatief voor twee bestaande voorzieningen waarmee OpenAPI specificaties kunnen worden gegenereerd uit Imvertor resultaten: 
-1. Het genereren van specificaties op basis van een specifiek BSM (Bericht Structuur Model) dat voldoet aan het [MBG - Metamodel BerichtstructuurGegevens](https://vng-realisatie.github.io/MBG-Werkomgeving/). In dit BSM kan een API worden gespecificeerd op basis van gegevens in een UGM (Uitwisselings Gegevensmodellen). De implementatie van deze voorziening is ontwikkeld door de [VNG](https://vng.nl/) en is als open source opgenomen in Imvertor.
+1. Het genereren van specificaties op basis van een specifiek BSM (Bericht Structuur Model) dat voldoet aan het [MBG - Metamodel BerichtstructuurGegevens](https://vng-realisatie.github.io/MBG-Werkomgeving/). In dit BSM kan een API worden gespecificeerd op basis van gegevens in een UGM (Uitwisselings Gegevensmodel). De implementatie van deze voorziening is ontwikkeld door de [VNG](https://vng.nl/) en is als open source opgenomen in Imvertor.
 2. Onderdelen van de Datahub services van het Kadaster waarbij onder andere APIs (GraphQL, OpenAPI) kunnen worden gegenereerd uit MIM modellen en aanvullende configuraties (momenteel nog closed source). 
 
 ## Inhoudsopgave
@@ -35,16 +35,16 @@ De Imvertor OpenAPI generator tracht de "API-first" en "code-first" benaderingen
 4. Met behulp van de Swagger Java libraries wordt de OpenAPI specificatie (versie 3.0.1 of 3.1.0) gegenereerd.
  
 #### 1. Het genereren van de MIM XML serialisatie
-Imvertor ondersteund sinds enige tijd het genereren van een XML representatie (serialisatie) van een in [Sparx Enterprise Architect](https://sparxsystems.com/products/ea/17.1/) opgesteld informatiemodel dat is gebaseerd op het MIM metamodel versie 1.1.0, 1.1.1 of 1.2. 
+Imvertor ondersteunt sinds enige tijd het genereren van een XML representatie (serialisatie) van een in [Sparx Enterprise Architect](https://sparxsystems.com/products/ea/17.1/) opgesteld informatiemodel dat is gebaseerd op het MIM metamodel versie 1.1.0, 1.1.1 of 1.2. 
 
 #### 2. Het genereren van de Java code en property file
-Imvertor ondersteund tevens het genereren van Java code uit een [MIM versie 1.2](https://docs.geostandaarden.nl/mim/mim/) serialisatie. Het ondersteund hierbij ook een modus waarin het specifieke Java classes genereert die kunnen worden gebruikt om OpenAPI specificaties te genereren (het genereren van deze Java code is momenteel nog niet beschikbaar in de master branch van het Imvertor Github project). De functionaliteit is in staat de volgende programmacode te genereren: 
+Imvertor ondersteunt tevens het genereren van Java code uit een [MIM versie 1.2](https://docs.geostandaarden.nl/mim/mim/) serialisatie. Het ondersteunt hierbij ook een modus waarin het specifieke Java classes genereert die kunnen worden gebruikt om OpenAPI specificaties te genereren (het genereren van deze Java code is momenteel nog niet beschikbaar in de master branch van het Imvertor Github project). De functionaliteit is in staat de volgende programmacode te genereren: 
 
 * Een verzameling Java classes (beans) die de MIM modelelementen zoals Objecttypen, Codelijsten, Referentielijsten, Gegevensgroeptypen uit het MIM model representeren. Deze Java classes zijn voorzien van specieke instructies (annotaties genoemd) die door de Swagger Java library kunnen worden gebruikt om een gedetailleerde OpenAPI specificatie te genereren.
 * Een verzameling Java resource classes die elk een aantal method/operaties op één (niet abstract) Objecttype bevatten. Standaard worden alle [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operaties voor dat Objecttype gegenereerd (zie ook [Kenmerken van de gegenereerde OpenAPI specificatie](#kenmerken-van-de-gegenereerde-openapi-specificatie)). 
 * Een property file met daarin metagegevens uit het MIM model in een voor het Java project leesbare vorm (zoals de titel, omschrijving, versie en contactpersonen)
 
-In de betreffende Imvertor processing mode of the default properties file moeten de volgende properties zijn geconfigureerd om Java code te genereren:
+In de betreffende Imvertor processing mode of in een properties file moeten de volgende properties zijn geconfigureerd om Java code te genereren:
 
 * `createsourcecode = yes`
 * `sourcecodetypes  = java-openapi`
@@ -70,7 +70,7 @@ En voor het genereren van een OpenAPI versie 3.1.0 specificatie:
 
 Dit commando genereert niet alleen de OpenAPI specificatie, maar valideert deze ook. De resultaten van de validatie worden op het scherm getoond maar ook weggeschreven in de log file `imvertor-openapi-gnerator.log`.
 
-Imvertor SaaS voert het samenvoegen (stap 3) en het genereren van de OpenAPI specificatie (stap 4) automatisch uit en voegt de gegenereerde OpenAPI specificatie toe aan het resultaat .zip bestand. In de betreffende Imvertor processing mode of the default properties file moet daartoe de volgende property zijn geconfigureerd:
+Imvertor SaaS voert het samenvoegen (stap 3) en het genereren van de OpenAPI specificatie (stap 4) automatisch uit en voegt de gegenereerde OpenAPI specificatie toe aan het resultaat .zip bestand. In de betreffende Imvertor processing mode of het properties file moet daartoe de volgende property zijn geconfigureerd:
 
 * `createopenapi = yes`
 
@@ -129,6 +129,6 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype" 
 * `openapi.patch.operationId`: Idem voor de PATCH method.
 
 ## Voorbeeld OpenAPI specificatie
-Zie [Fietsenwinkel OpenAPI specificatie](https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) voor een voorbeeld OpenAPI specificatie dat is gegenereerd via deze methode. Dit voorbeeld bevat ook de custom GET collectie method op Klant objecten. 
+Zie [Fietsenwinkel OpenAPI specificatie](https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) voor een voorbeeld OpenAPI specificatie die is gegenereerd via deze methode. Dit voorbeeld bevat ook de custom GET collectie method op Klant objecten. 
 
 Dit voorbeeld kan ook worden bekeken in de [Swagger UI](https://generator.swagger.io/?url=https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml) of via [Redocly](https://redocly.github.io/redoc/?url=https://armatiek.github.io/imvertor-openapi-generator/examples/fietsenwinkel.yaml).
