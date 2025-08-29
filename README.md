@@ -103,18 +103,18 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemo
 
 * `openapi.title`: De `title` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `naam` van het Informatiemodel gebruikt. 
 * `openapi.description`: De `description` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Als deze tag niet is gespecificeerd dan wordt de MIM `definitie` van het Informatiemodel gebruikt.
-* `openapi.version`: De `versie` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Er is geen verstekwaarde voor deze tag. Voorbeeld '2.0.2'. 
-* `openapi.contact`: Het `contact` van de OpenAPI specificatie (zie [Contact Object](https://swagger.io/specification/#contact-object)). Er is geen verstekwaarde voor deze tag.
-* `openapi.license`: De `license` waaronder de OpenAPI specificatie wordt gepubliceerd zie [License Object](https://swagger.io/specification/#license-object)). De verstekwaarde is "European Union Public License, version 1.2 (EUPL-1.2)". 
+* `openapi.version`: De `versie` van de OpenAPI specificatie (zie [Info Object](https://swagger.io/specification/#info-object)). Er is geen default waarde voor deze tag. Voorbeeld '2.0.2'. 
+* `openapi.contact`: Het `contact` van de OpenAPI specificatie (zie [Contact Object](https://swagger.io/specification/#contact-object)). Er is geen default waarde voor deze tag.
+* `openapi.license`: De `license` waaronder de OpenAPI specificatie wordt gepubliceerd zie [License Object](https://swagger.io/specification/#license-object)). De default waarde is "European Union Public License, version 1.2 (EUPL-1.2)". 
 * `openapi.methods`: De standaard CRUD operaties die moeten worden ondersteund in de OpenAPI specificatie. Als bijvoorbeeld de GET method voor zowel items als collecties moet worden ondersteund, alsmede POST, PUT, DELETE, maar geen PATCH, dan moet de waarde van deze tag zijn: `getCol,getItem,post,put,delete`.  
-* `openapi.pathVersion`:  Het versienummer dat wordt opgenomen als onderdeel van de url paden (bijvoorbeeld `https://api.example.org/v1/`). Dit moet een enkelvoudig nummer zijn zonder punten (geen semver) en zonder prefix 'v'. De verstekwaarde is '1'.
-* `openapi.openAPIVersion`: De versie van de OpenAPI specificatie die moet worden gegenereerd, versie '3.0.1' of '3.1.0'. De verstekwaarde is '3.0.1'.
-* `openapi.getCol.responseCodes`: De gewenste response HTTP codes van GET methods van collecties. De verstekwaarde is '200,400,401,403,404,405,415,429,500,503'.
-* `openapi.getItem.responseCodes`: Idem voor de GET methods van items. De verstekwaarde is '200,400,401,403,404,405,415,429,500,503'.
-* `openapi.post.responseCodes`: Idem voor de POST methods. De verstekwaarde is '201,400,401,403,405,409,415,422,429,500,503'
-* `openapi.delete.responseCodes`: Idem voor de DELETE methods. De verstekwaarde is '200,204,401,403,404,405,409,415,429,500,503'
-* `openapi.put.responseCodes`:  Idem voor de PUT methods. De verstekwaarde is '200,201,204,400,401,403,404,405,409,415,429,500,503'
-* `openapi.patch.responseCodes`: Idem voor de PATCH methods. De verstekwaarde is '200,204,400,401,403,404,405,409,415,422,429,500,503'
+* `openapi.pathVersion`:  Het versienummer dat wordt opgenomen als onderdeel van de url paden (bijvoorbeeld `https://api.example.org/v1/`). Dit moet een enkelvoudig nummer zijn zonder punten (geen semver) en zonder prefix 'v'. De default waarde is '1'.
+* `openapi.openAPIVersion`: De versie van de OpenAPI specificatie die moet worden gegenereerd, versie '3.0.1' of '3.1.0'. De default waarde is '3.0.1'.
+* `openapi.getCol.responseCodes`: De gewenste response HTTP codes van GET methods van collecties. De default waarde is '200,400,401,403,404,405,415,429,500,503'.
+* `openapi.getItem.responseCodes`: Idem voor de GET methods van items. De default waarde is '200,400,401,403,404,405,415,429,500,503'.
+* `openapi.post.responseCodes`: Idem voor de POST methods. De default waarde is '201,400,401,403,405,409,415,422,429,500,503'
+* `openapi.delete.responseCodes`: Idem voor de DELETE methods. De default waarde is '200,204,401,403,404,405,409,415,429,500,503'
+* `openapi.put.responseCodes`:  Idem voor de PUT methods. De default waarde is '200,201,204,400,401,403,404,405,409,415,429,500,503'
+* `openapi.patch.responseCodes`: Idem voor de PATCH methods. De default waarde is '200,204,400,401,403,404,405,409,415,422,429,500,503'
 
 Tags die kunnen worden toegevoegd op modelelementen met stereotype "Objecttype" en van toepasssing zijn op individuele Objecttypen:
 
