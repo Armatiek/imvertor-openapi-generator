@@ -1,14 +1,9 @@
 package nl.imvertor;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -24,10 +19,6 @@ import io.swagger.v3.oas.integration.OpenApiConfigurationException;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.integration.api.OpenApiContext;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 
@@ -36,39 +27,7 @@ public class ImvertorOpenAPIGenerator {
   private static final Logger logger = LoggerFactory.getLogger(ImvertorOpenAPIGenerator.class);
   
   private OpenAPI createOpenAPI(String[] args) throws OpenApiConfigurationException, IOException {
-    Properties properties = loadPropertiesFromClassPath("openapi.properties");
-    
-    List<Server> servers = new ArrayList<Server>();
-    
-    String title = properties.getProperty("openapi.title", "No title");
-    String description = properties.getProperty("openapi.description", null);
-    String version = properties.getProperty("openapi.version", "1.0.0");
-    String contact = properties.getProperty("openapi.contact", null);
-    String license = properties.getProperty("openapi.license", null);
-    
-    Info info = new Info().title(title);
-    if (description != null) {
-      info.setDescription(description);
-    }
-    if (version != null) {
-      info.setVersion(version);
-    }
-    if (contact != null) {
-      Contact cnt = new Contact();
-      cnt.setUrl(contact);
-      info.setContact(cnt);
-    }
-    if (true) {
-      /* TODO: read from properties file: */
-      License lic = new License();
-      lic.setName("European Union Public License, version 1.2 (EUPL-1.2)");
-      lic.setUrl("https://eupl.eu/1.2/nl/");
-      info.setLicense(lic);
-    }
-    
-    OpenAPI api = new OpenAPI()
-        .servers(servers)
-        .info(info);
+    OpenAPI api = new OpenAPI();
     
     // Define the resource classes to scan
     Set<String> resourcePackages = new HashSet<>();
@@ -89,17 +48,6 @@ public class ImvertorOpenAPIGenerator {
 
     return context.read();
   }
-  
-  private Properties loadPropertiesFromClassPath(String path) throws IOException {
-    try (InputStream input = getClass().getClassLoader().getResourceAsStream(path)) {
-      if (input == null) {
-        throw new FileNotFoundException("Could not find openapi.properties on classpath");
-      }
-      Properties properties = new Properties();
-      properties.load(input);
-      return properties;
-    }
-  }  
   
   private void generateOpenAPIYaml(String[] args) throws Exception {
     logger.info("Generating OpenAPI specification ...");

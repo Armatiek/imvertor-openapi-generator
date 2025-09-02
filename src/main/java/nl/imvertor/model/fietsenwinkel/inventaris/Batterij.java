@@ -3,7 +3,7 @@ package nl.imvertor.model.fietsenwinkel.inventaris;
 import nl.imvertor.mim.annotation.*;
 import nl.imvertor.mim.model.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import io.swagger.v3.oas.annotations.media.Schema.*;
 import java.util.*;
 
 /**
@@ -13,11 +13,11 @@ import java.util.*;
 @Schema(description = "De batterij van de E-Bike.")
 public class Batterij {
 
-  /**
-   * Field that is not part of the model but added to define an identifying field for this entity
-   */
-  @Schema(description = "Field that is not part of the model but added to define an identifying field for this entity", requiredMode = RequiredMode.REQUIRED)
-  private Long id;
+  @Schema(description = "Unieke identificatie van de resource waarnaar verwezen wordt", type = "string", requiredMode = RequiredMode.REQUIRED, minLength = 1)
+  private String id;
+
+  @Schema(description = "URL-referentie naar de resource waarnaar verwezen wordt", type = "string", format = "uri", requiredMode = RequiredMode.REQUIRED, accessMode = AccessMode.READ_ONLY, minLength = 1)
+  private String url;
 
   /**
    * <p>Garantienummer op de <strong>Batterij</strong> (wanneer e-bike).</p>
@@ -31,14 +31,22 @@ public class Batterij {
    * Attribuutsoort -> GestructureerdDatatype
    */
   @Schema(description = "De omvang van de batterij.", requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.mim.model.Reference omvang;
+  private nl.imvertor.model.fietsenwinkel.gemeenschappelijketypen.Dimensies omvang;
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   public String getGarantienummer() {
@@ -49,11 +57,11 @@ public class Batterij {
     this.garantienummer = garantienummer;
   }
 
-  public nl.imvertor.mim.model.Reference getOmvang() {
+  public nl.imvertor.model.fietsenwinkel.gemeenschappelijketypen.Dimensies getOmvang() {
     return omvang;
   }
 
-  public void setOmvang(nl.imvertor.mim.model.Reference omvang) {
+  public void setOmvang(nl.imvertor.model.fietsenwinkel.gemeenschappelijketypen.Dimensies omvang) {
     this.omvang = omvang;
   }
 

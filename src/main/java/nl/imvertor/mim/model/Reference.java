@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 @Schema(description = "Reference to another resource")
 public class Reference {
   
-  @Schema(type = "string", description = "ID van de resource waarnaar verwezen wordt", requiredMode = RequiredMode.REQUIRED, minLength = 1, maxLength = 40)
+  @Schema(type = "string", description = "ID van de resource waarnaar verwezen wordt", requiredMode = RequiredMode.REQUIRED, minLength = 1)
   private String id;
   
   @Schema(type = "string", format = "uri", description = "URL-referentie naar de resource waarnaar verwezen wordt", requiredMode = RequiredMode.REQUIRED, minLength = 1, accessMode = AccessMode.READ_ONLY )

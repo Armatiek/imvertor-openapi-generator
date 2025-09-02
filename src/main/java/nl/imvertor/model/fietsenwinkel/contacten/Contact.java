@@ -3,15 +3,18 @@ package nl.imvertor.model.fietsenwinkel.contacten;
 import nl.imvertor.mim.annotation.*;
 import nl.imvertor.mim.model.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import io.swagger.v3.oas.annotations.media.Schema.*;
 import java.util.*;
 
 /**
  * <p>Een persoon of instelling waar mee wordt gecommuniceerd.</p>
  */
-@Keuze(fieldNames = {"betalingBankBankrekening", "betalingCreditCreditcard"} , message = "Exactly one of betalingBankBankrekening, betalingCreditCreditcard must be non-zero")
+@Keuze(fieldNames = {"betalingBank", "betalingCredit"} , message = "Exactly one of betalingBank, betalingCredit must be non-zero")
 @Schema(description = "Een persoon of instelling waar mee wordt gecommuniceerd.")
 public abstract class Contact {
+
+  @Schema(description = "URL-referentie naar de resource waarnaar verwezen wordt", type = "string", format = "uri", requiredMode = RequiredMode.REQUIRED, accessMode = AccessMode.READ_ONLY, minLength = 1)
+  private String url;
 
   /**
    * <p>De naam van het contact. </p>
@@ -32,14 +35,18 @@ public abstract class Contact {
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Een contact doet een betaling met een betaalmiddel.", requiredMode = RequiredMode.REQUIRED)
-  private List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBankBankrekening;
+  private List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBank;
 
   /**
    * <p>Een contact doet een betaling met een betaalmiddel.</p>
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Een contact doet een betaling met een betaalmiddel.", requiredMode = RequiredMode.REQUIRED)
-  private List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCreditCreditcard;
+  private List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCredit;
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
   public String getNaam() {
     return naam;
@@ -57,20 +64,20 @@ public abstract class Contact {
     this.postadres = postadres;
   }
 
-  public List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> getBetalingBankBankrekening() {
-    return betalingBankBankrekening;
+  public List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> getBetalingBank() {
+    return betalingBank;
   }
 
-  public void setBetalingBankBankrekening(List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBankBankrekening) {
-    this.betalingBankBankrekening = betalingBankBankrekening;
+  public void setBetalingBank(List<nl.imvertor.model.fietsenwinkel.contacten.Bankrekening> betalingBank) {
+    this.betalingBank = betalingBank;
   }
 
-  public List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> getBetalingCreditCreditcard() {
-    return betalingCreditCreditcard;
+  public List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> getBetalingCredit() {
+    return betalingCredit;
   }
 
-  public void setBetalingCreditCreditcard(List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCreditCreditcard) {
-    this.betalingCreditCreditcard = betalingCreditCreditcard;
+  public void setBetalingCredit(List<nl.imvertor.model.fietsenwinkel.contacten.Creditcard> betalingCredit) {
+    this.betalingCredit = betalingCredit;
   }
 
 }

@@ -3,7 +3,7 @@ package nl.imvertor.model.fietsenwinkel.contacten;
 import nl.imvertor.mim.annotation.*;
 import nl.imvertor.mim.model.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import io.swagger.v3.oas.annotations.media.Schema.*;
 import java.util.*;
 
 /**
@@ -12,6 +12,9 @@ import java.util.*;
 @Objecttype
 @Schema(description = "Een persoon die een fiets heeft gekocht.")
 public class Klant extends nl.imvertor.model.fietsenwinkel.contacten.Contact {
+
+  @Schema(description = "URL-referentie naar de resource waarnaar verwezen wordt", type = "string", format = "uri", requiredMode = RequiredMode.REQUIRED, accessMode = AccessMode.READ_ONLY, minLength = 1)
+  private String url;
 
   /**
    * <p>Indicatie dat de klant de nieuwsbrief wenst te ontvangen.</p>
@@ -24,7 +27,11 @@ public class Klant extends nl.imvertor.model.fietsenwinkel.contacten.Contact {
    * ExterneKoppeling -> Objecttype
    */
   @Schema(requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.personen.Persoon betreftPersoon;
+  private nl.imvertor.model.fietsenwinkel.personen.Persoon betreft;
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
   public Boolean isNieuwsbrief() {
     return nieuwsbrief;
@@ -34,12 +41,12 @@ public class Klant extends nl.imvertor.model.fietsenwinkel.contacten.Contact {
     this.nieuwsbrief = nieuwsbrief;
   }
 
-  public nl.imvertor.model.fietsenwinkel.personen.Persoon getBetreftPersoon() {
-    return betreftPersoon;
+  public nl.imvertor.model.fietsenwinkel.personen.Persoon getBetreft() {
+    return betreft;
   }
 
-  public void setBetreftPersoon(nl.imvertor.model.fietsenwinkel.personen.Persoon betreftPersoon) {
-    this.betreftPersoon = betreftPersoon;
+  public void setBetreft(nl.imvertor.model.fietsenwinkel.personen.Persoon betreft) {
+    this.betreft = betreft;
   }
 
 }

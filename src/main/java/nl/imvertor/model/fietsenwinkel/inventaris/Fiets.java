@@ -3,7 +3,7 @@ package nl.imvertor.model.fietsenwinkel.inventaris;
 import nl.imvertor.mim.annotation.*;
 import nl.imvertor.mim.model.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
+import io.swagger.v3.oas.annotations.media.Schema.*;
 import java.util.*;
 
 /**
@@ -12,6 +12,9 @@ import java.util.*;
 @Keuze(fieldNames = {"kettingaandrijving", "snaaraandrijving"} , message = "Exactly one of kettingaandrijving, snaaraandrijving must be non-zero")
 @Schema(description = "Een tweewieler.")
 public abstract class Fiets {
+
+  @Schema(description = "URL-referentie naar de resource waarnaar verwezen wordt", type = "string", format = "uri", requiredMode = RequiredMode.REQUIRED, accessMode = AccessMode.READ_ONLY, minLength = 1)
+  private String url;
 
   /**
    * <p>De identificatie van de fiets. </p>
@@ -32,7 +35,7 @@ public abstract class Fiets {
    * Attribuutsoort -> GestructureerdDatatype
    */
   @Schema(description = "De omvang van de fiets in dimensies vanaf voor tot achterband (opgepompt), uitersten van trappers of bak of bagagedrager, en hoogste punt vanaf de weg (stuur, zadel).", requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.mim.model.Reference omvang;
+  private nl.imvertor.model.fietsenwinkel.gemeenschappelijketypen.Dimensies omvang;
 
   /**
    * <p>Het type nummer van de fiets.</p>
@@ -67,35 +70,39 @@ public abstract class Fiets {
    * Attribuutsoort -> Codelijst
    */
   @Schema(description = "De code van het type kettingaandrijving.", requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.mim.model.Reference kettingaandrijving;
+  private nl.imvertor.model.fietsenwinkel.inventaris.KettingLijst kettingaandrijving;
 
   /**
    * <p>De code van het type snaaraandrijving.</p>
    * Attribuutsoort -> Codelijst
    */
   @Schema(description = "De code van het type snaaraandrijving.", requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.mim.model.Reference snaaraandrijving;
+  private nl.imvertor.model.fietsenwinkel.inventaris.SnaarLijst snaaraandrijving;
 
   /**
    * <p>Een fiets kan zijn aangestuurd door een motor. Wanneer electrische fiets, dan spreken we over "aansturing door Batterij".</p>
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Een fiets kan zijn aangestuurd door een motor. Wanneer electrische fiets, dan spreken we over \"aansturing door Batterij\".", requiredMode = RequiredMode.NOT_REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoorBatterij;
+  private nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoor;
 
   /**
    * <p>De Fiets is geleverd door een Leverancier. </p>
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "De Fiets is geleverd door een Leverancier.", requiredMode = RequiredMode.REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoorLeverancier;
+  private nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoor;
 
   /**
    * <p>Overdracht van geld heeft plaatsgevonden waarmee een relatie is opgebouwd met de <strong>Klant</strong>, w.o. garantieverplichtingen.</p>
    * Relatiesoort -> Objecttype
    */
   @Schema(description = "Overdracht van geld heeft plaatsgevonden waarmee een relatie is opgebouwd met de Klant , w.o. garantieverplichtingen.", requiredMode = RequiredMode.NOT_REQUIRED)
-  private nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAanKlant;
+  private nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAan;
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
   public String getId() {
     return id;
@@ -113,11 +120,11 @@ public abstract class Fiets {
     this.leveringsdatum = leveringsdatum;
   }
 
-  public nl.imvertor.mim.model.Reference getOmvang() {
+  public nl.imvertor.model.fietsenwinkel.gemeenschappelijketypen.Dimensies getOmvang() {
     return omvang;
   }
 
-  public void setOmvang(nl.imvertor.mim.model.Reference omvang) {
+  public void setOmvang(nl.imvertor.model.fietsenwinkel.gemeenschappelijketypen.Dimensies omvang) {
     this.omvang = omvang;
   }
 
@@ -153,44 +160,44 @@ public abstract class Fiets {
     this.volgnummer = volgnummer;
   }
 
-  public nl.imvertor.mim.model.Reference getKettingaandrijving() {
+  public nl.imvertor.model.fietsenwinkel.inventaris.KettingLijst getKettingaandrijving() {
     return kettingaandrijving;
   }
 
-  public void setKettingaandrijving(nl.imvertor.mim.model.Reference kettingaandrijving) {
+  public void setKettingaandrijving(nl.imvertor.model.fietsenwinkel.inventaris.KettingLijst kettingaandrijving) {
     this.kettingaandrijving = kettingaandrijving;
   }
 
-  public nl.imvertor.mim.model.Reference getSnaaraandrijving() {
+  public nl.imvertor.model.fietsenwinkel.inventaris.SnaarLijst getSnaaraandrijving() {
     return snaaraandrijving;
   }
 
-  public void setSnaaraandrijving(nl.imvertor.mim.model.Reference snaaraandrijving) {
+  public void setSnaaraandrijving(nl.imvertor.model.fietsenwinkel.inventaris.SnaarLijst snaaraandrijving) {
     this.snaaraandrijving = snaaraandrijving;
   }
 
-  public nl.imvertor.model.fietsenwinkel.inventaris.Batterij getAangestuurdDoorBatterij() {
-    return aangestuurdDoorBatterij;
+  public nl.imvertor.model.fietsenwinkel.inventaris.Batterij getAangestuurdDoor() {
+    return aangestuurdDoor;
   }
 
-  public void setAangestuurdDoorBatterij(nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoorBatterij) {
-    this.aangestuurdDoorBatterij = aangestuurdDoorBatterij;
+  public void setAangestuurdDoor(nl.imvertor.model.fietsenwinkel.inventaris.Batterij aangestuurdDoor) {
+    this.aangestuurdDoor = aangestuurdDoor;
   }
 
-  public nl.imvertor.model.fietsenwinkel.contacten.Leverancier getGeleverdDoorLeverancier() {
-    return geleverdDoorLeverancier;
+  public nl.imvertor.model.fietsenwinkel.contacten.Leverancier getGeleverdDoor() {
+    return geleverdDoor;
   }
 
-  public void setGeleverdDoorLeverancier(nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoorLeverancier) {
-    this.geleverdDoorLeverancier = geleverdDoorLeverancier;
+  public void setGeleverdDoor(nl.imvertor.model.fietsenwinkel.contacten.Leverancier geleverdDoor) {
+    this.geleverdDoor = geleverdDoor;
   }
 
-  public nl.imvertor.model.fietsenwinkel.contacten.Klant getVerkochtAanKlant() {
-    return verkochtAanKlant;
+  public nl.imvertor.model.fietsenwinkel.contacten.Klant getVerkochtAan() {
+    return verkochtAan;
   }
 
-  public void setVerkochtAanKlant(nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAanKlant) {
-    this.verkochtAanKlant = verkochtAanKlant;
+  public void setVerkochtAan(nl.imvertor.model.fietsenwinkel.contacten.Klant verkochtAan) {
+    this.verkochtAan = verkochtAan;
   }
 
 }
