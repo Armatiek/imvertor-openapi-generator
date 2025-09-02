@@ -12,10 +12,12 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.swagger.v3.core.util.Json;
 import io.swagger.v3.core.util.Yaml;
 import io.swagger.v3.jaxrs2.integration.JaxrsOpenApiContextBuilder;
 import io.swagger.v3.oas.integration.OpenApiConfigurationException;
@@ -28,8 +30,6 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
-
-import static java.lang.String.format;
 
 public class ImvertorOpenAPIGenerator {
   
@@ -105,9 +105,12 @@ public class ImvertorOpenAPIGenerator {
     logger.info("Generating OpenAPI specification ...");
     OpenAPI openApi = createOpenAPI(args);
     String openApiYaml = Yaml.pretty(openApi);
+    String openApiJson = Json.pretty(openApi);
     validateOpenAPISpec(openApiYaml);
-    logger.info(format("Writing OpenAPI specification to \"%s\" ...", args[0]));
-    FileUtils.write(new File(args[0]), openApiYaml, StandardCharsets.UTF_8);
+    logger.info("Writing OpenAPI specification to files ...");
+    String fileNameNoExt = FilenameUtils.removeExtension(args[0]);
+    FileUtils.write(new File(fileNameNoExt + ".yaml"), openApiYaml, StandardCharsets.UTF_8);
+    FileUtils.write(new File(fileNameNoExt + ".json"), openApiJson, StandardCharsets.UTF_8);
     logger.info("Finished.");
   }
   
@@ -117,17 +120,17 @@ public class ImvertorOpenAPIGenerator {
     SwaggerParseResult result = parser.readContents(openApiYaml);
     OpenAPI openAPI = result.getOpenAPI();
     if (openAPI == null) {
-      logger.warn("Invalid OpenAPI specification");
+      logger.error("Invalid OpenAPI specification.");
     }
     if (result.getMessages() != null && !result.getMessages().isEmpty()) {
       for (String msg : result.getMessages()) {
-        logger.warn(" - validation message: " + msg);
+        logger.error(" - validation message: " + msg);
       }
     } else {
-      logger.info("OpenAPI specification is valid");
+      logger.info("OpenAPI specification is valid.");
     }
   }
-
+  
   public static void main(String[] args) {
     if (args.length == 0) {
       logger.info("Please specify the output path of the OpenAPI yaml file as the first argument");
