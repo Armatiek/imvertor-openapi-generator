@@ -94,7 +94,6 @@ De gegenereerde OpenAPI specificatie heeft de volgende kenmerken:
 * De GET operaties die collecties van objecten opleveren kunnen gepagineerd worden opgevraagd. Aan deze operaties kan telkens een pagina, een paginagrootte en een sortering worden meegegeven. In de resultaten is (naast de lijst van objecten) telkens een link aanwezig naar de vorige en de volgende pagina. Zie ook [Use default error handling - GET](https://github.com/Geonovum/KP-APIs/blob/master/API-strategie-modules/_extensions_legacy/ext-error-handling.md#api-46).
 * Het MIM kenmerk [aggregatieType](https://docs.geostandaarden.nl/mim/mim/#metagegeven-aggregatietype) van een Relatiesoort bepaald of het target van de Relatiesoort integraal wordt "ingebed" in het JSON schema van zijn Objecttype of dat er alleen een verwijzing naar het target van de relatie wordt opgenomen. Als het aggregatieType de waarde "Compositie" of "Geen" heeft wordt het target van de relatie ingebed, als de waarde "Gedeeld" is wordt een link opgenomen. Zie ook [NLGov REST API Design Rules - Relationships](https://gitdocumentatie.logius.nl/publicatie/api/adr/2.0.2/#relationships).
 * Momenteel worden MIM Keuze modelelementen nog niet omgezet naar JSON schema `anyOf` constructies. In plaats daarvan wordt een Keuze tussen Attribuutsoorten of Relatiesoorten omgezet naar twee optionele key/values.     
-* De gebruikte response codes en error response schema's verwijzen momenteel nog naar de door VNG realisatie gedefinieerde codes in hun API-Kennisbank.
 
 ## Configuratie mogelijkheden
 Het genereren van een OpenAPI specificatie kan met de Imvertor OpenAPI generator in principe gedaan worden zonder extra (meta)modellen en/of configuratie. Via het toevoegen van specifieke tags aan het MIM informatiemodel in Enterprise Architect kan er echter invloed worden uitgeoefend op het standaard gedrag van de generator:
@@ -112,7 +111,7 @@ Tags die kunnen worden toegevoegd op modelelementen met stereotype "Informatiemo
 * `openapi.getCol.responseCodes`: De gewenste response HTTP codes van GET methods van collecties. De default waarde is '200,400,401,403,404,405,415,429,500,503'.
 * `openapi.getItem.responseCodes`: Idem voor de GET methods van items. De default waarde is '200,400,401,403,404,405,415,429,500,503'.
 * `openapi.post.responseCodes`: Idem voor de POST methods. De default waarde is '201,400,401,403,405,409,415,422,429,500,503'
-* `openapi.delete.responseCodes`: Idem voor de DELETE methods. De default waarde is '200,204,401,403,404,405,409,415,429,500,503'
+* `openapi.delete.responseCodes`: Idem voor de DELETE methods. De default waarde is '202,204,401,403,404,405,409,415,429,500,503'
 * `openapi.put.responseCodes`:  Idem voor de PUT methods. De default waarde is '200,201,204,400,401,403,404,405,409,415,429,500,503'
 * `openapi.patch.responseCodes`: Idem voor de PATCH methods. De default waarde is '200,204,400,401,403,404,405,409,415,422,429,500,503'
 
