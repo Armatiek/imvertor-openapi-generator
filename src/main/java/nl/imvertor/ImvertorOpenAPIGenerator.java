@@ -90,6 +90,7 @@ public class ImvertorOpenAPIGenerator {
       generator.generateOpenAPIYaml(args);
     } catch (Throwable e) {
       logger.error("Error generating OpenAPI specification", e);
+      logger.error(e.getMessage());
       System.exit(1);
     }
   }
