@@ -72,7 +72,7 @@ public class ImvertorOpenAPIGenerator {
     }
     if (result.getMessages() != null && !result.getMessages().isEmpty()) {
       for (String msg : result.getMessages()) {
-        logger.error(" - validation message: " + msg);
+        logger.error("[validator] - " + msg);
       }
     } else {
       logger.info("OpenAPI specification is valid.");
@@ -90,7 +90,7 @@ public class ImvertorOpenAPIGenerator {
       generator.generateOpenAPIYaml(args);
     } catch (Throwable e) {
       logger.error("Error generating OpenAPI specification", e);
-      logger.error(e.getMessage());
+      logger.error("[generator] - " + e.getMessage());
       System.exit(1);
     }
   }
