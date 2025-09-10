@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,12 +20,14 @@ import io.swagger.v3.oas.integration.api.OpenApiContext;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
+import nl.imvertor.resource.OpenApiDefinition;
+import nl.imvertor.resource.OpenApiDefinition.OpenAPISpecVersion;
 
 public class ImvertorOpenAPIGenerator {
   
   private static final Logger logger = LoggerFactory.getLogger(ImvertorOpenAPIGenerator.class);
   
-  private OpenAPI createOpenAPI(String[] args) throws OpenApiConfigurationException, IOException {
+  private OpenAPI createOpenAPI() throws OpenApiConfigurationException, IOException {
     OpenAPI api = new OpenAPI();
     
     // Define the resource classes to scan
@@ -36,7 +37,7 @@ public class ImvertorOpenAPIGenerator {
     // Create Swagger configuration
     SwaggerConfiguration config = new SwaggerConfiguration()
             .openAPI(api)
-            .openAPI31(args.length > 1 && Strings.CI.equals(args[1], "api31"))
+            .openAPI31(OpenApiDefinition.getOpenAPISpecVersion().equals(OpenAPISpecVersion.API31))
             .resourcePackages(resourcePackages)
             .prettyPrint(true);
 
@@ -49,9 +50,9 @@ public class ImvertorOpenAPIGenerator {
     return context.read();
   }
   
-  private void generateOpenAPIYaml(String[] args) throws Exception {
+  private void generateOpenAPIYamlAndJson(String[] args) throws Exception {
     logger.info("Generating OpenAPI specification ...");
-    OpenAPI openApi = createOpenAPI(args);
+    OpenAPI openApi = createOpenAPI();
     String openApiYaml = Yaml.pretty(openApi);
     String openApiJson = Json.pretty(openApi);
     validateOpenAPISpec(openApiYaml);
@@ -82,12 +83,11 @@ public class ImvertorOpenAPIGenerator {
   public static void main(String[] args) {
     if (args.length == 0) {
       logger.info("Please specify the output path of the OpenAPI yaml file as the first argument");
-      logger.info("And optionally specify \"api31\" as the second argument if you want to generate an OpenAPI specification version 3.1.0");
       return;
     }
     try {
       ImvertorOpenAPIGenerator generator = new ImvertorOpenAPIGenerator();
-      generator.generateOpenAPIYaml(args);
+      generator.generateOpenAPIYamlAndJson(args);
     } catch (Throwable e) {
       logger.error("Error generating OpenAPI specification", e);
       logger.error("[generator] - " + e.getMessage());
