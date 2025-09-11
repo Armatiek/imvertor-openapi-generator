@@ -53,6 +53,14 @@ public class ImvertorOpenAPIGenerator {
   private void generateOpenAPIYamlAndJson(String[] args) throws Exception {
     logger.info("Generating OpenAPI specification ...");
     OpenAPI openApi = createOpenAPI();
+    
+    if (OpenApiDefinition.getSchemasOnly()) {
+      if (openApi.getTags() != null)
+        openApi.getTags().clear();
+      if (openApi.getPaths() != null)
+        openApi.getPaths().clear();
+    }
+    
     String openApiYaml = Yaml.pretty(openApi);
     String openApiJson = Json.pretty(openApi);
     validateOpenAPISpec(openApiYaml);
