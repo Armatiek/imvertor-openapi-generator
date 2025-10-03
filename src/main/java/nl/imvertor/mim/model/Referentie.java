@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 
-@Schema(description = "Referentie naar een andere resource")
+@Schema(name = "Referentie", description = "Referentie naar een andere resource")
 public class Referentie {
   
   @Schema(type = "string", description = "ID van de resource waarnaar verwezen wordt", requiredMode = RequiredMode.REQUIRED, minLength = 1)

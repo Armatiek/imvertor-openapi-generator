@@ -3,6 +3,7 @@ package nl.imvertor.mim.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 
+@Schema(name = "GepagineerdBase", description = "Basis schema voor gepagineerde resultaten")
 public abstract class GepagineerdBase {
   
   @Schema(description = "Huidig paginanummer", type = "integer", format = "int32", requiredMode = RequiredMode.REQUIRED, minimum = "1")
