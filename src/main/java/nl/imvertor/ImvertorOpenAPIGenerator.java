@@ -3,8 +3,12 @@ package nl.imvertor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -18,6 +22,9 @@ import io.swagger.v3.oas.integration.OpenApiConfigurationException;
 import io.swagger.v3.oas.integration.SwaggerConfiguration;
 import io.swagger.v3.oas.integration.api.OpenApiContext;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.tags.Tag;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.ParseOptions;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
@@ -60,6 +67,8 @@ public class ImvertorOpenAPIGenerator {
         openAPI.getTags().clear();
       if (openAPI.getPaths() != null)
         openAPI.getPaths().clear();
+    } else {
+      sortPathsAndOperations(openAPI);
     }
     
     String openApiYaml = Yaml.pretty(openAPI);
@@ -98,6 +107,43 @@ public class ImvertorOpenAPIGenerator {
     }
     return openAPI;
   }
+  
+  private void sortPathsAndOperations(OpenAPI openAPI) {
+    if (openAPI.getTags() != null) {
+      openAPI.getTags().sort(Comparator.comparing(Tag::getName, String.CASE_INSENSITIVE_ORDER));
+    }
+    
+    if (openAPI.getPaths() == null) {
+      return;
+    }
+   
+    // Sort paths alphabetically
+    Map<String, PathItem> sortedPaths = openAPI.getPaths().entrySet()
+        .stream()
+        .sorted(Map.Entry.comparingByKey())
+        .collect(Collectors.toMap(
+            Map.Entry::getKey,
+            e -> sortOperations(e.getValue()),
+            (e1, e2) -> e1,
+            LinkedHashMap::new
+        ));  
+    Paths paths = new Paths();
+    paths.putAll(sortedPaths);
+    openAPI.setPaths(paths);
+  }
+  
+  private PathItem sortOperations(PathItem pathItem) {
+    PathItem sorted = new PathItem();
+    if (pathItem.getGet() != null) sorted.setGet(pathItem.getGet());
+    if (pathItem.getPost() != null) sorted.setPost(pathItem.getPost());
+    if (pathItem.getPut() != null) sorted.setPut(pathItem.getPut());
+    if (pathItem.getDelete() != null) sorted.setDelete(pathItem.getDelete());
+    if (pathItem.getPatch() != null) sorted.setPatch(pathItem.getPatch());
+    if (pathItem.getHead() != null) sorted.setHead(pathItem.getHead());
+    if (pathItem.getOptions() != null) sorted.setOptions(pathItem.getOptions());
+    if (pathItem.getTrace() != null) sorted.setTrace(pathItem.getTrace());
+    return sorted;
+}
     
   public static void main(String[] args) {
     if (args.length == 0) {
