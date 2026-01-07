@@ -80,14 +80,15 @@ public class ImvertorOpenAPIGenerator {
       openApiJson = Json.pretty(parsedOpenAPI);
     } 
     
-    /*
-    OpenAPIExploder exploder = new OpenAPIExploder();
-    exploder.explode(openAPI, "yaml", new File(fileNameNoExt + "_exploded_yaml.zip"));
-    exploder.explode(openAPI, "json", new File(fileNameNoExt + "_exploded_json.zip"));
-    */
-    
     logger.info("Writing OpenAPI description to files ...");
     String fileNameNoExt = FilenameUtils.removeExtension(args[0]);
+    
+    if (OpenApiDefinition.getExplodeDescriptions()) {
+      OpenAPIExploder exploder = new OpenAPIExploder();
+      exploder.explode(openAPI, "yaml", new File(fileNameNoExt + "_exploded_yaml.zip"), OpenApiDefinition.getBaseUrl());
+      exploder.explode(openAPI, "json", new File(fileNameNoExt + "_exploded_json.zip"), OpenApiDefinition.getBaseUrl());
+    }
+    
     FileUtils.write(new File(fileNameNoExt + ".yaml"), openApiYaml, StandardCharsets.UTF_8);
     FileUtils.write(new File(fileNameNoExt + ".json"), openApiJson, StandardCharsets.UTF_8);
     logger.info("Finished.");

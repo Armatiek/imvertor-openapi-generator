@@ -12,18 +12,23 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.core.util.Yaml;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.media.Schema;
 
 @SuppressWarnings("rawtypes")
 public class OpenAPIExploder {
      
-  public void explode(OpenAPI openAPI, String format, File zipFile) throws FileNotFoundException, IOException {
-    Map<String, OpenAPI> explodedSpecs = new HashMap<>();
+  public void explode(OpenAPI openAPI, String format, File zipFile, String baseUrl) throws FileNotFoundException, IOException {
     if (openAPI.getComponents() != null && openAPI.getComponents().getSchemas() != null) {
+      Map<String, OpenAPI> explodedOpenAPIMap = new HashMap<>();
+      
       Map<String, Schema> allSchemas = openAPI.getComponents().getSchemas();
 
       // Create a separate OpenAPI spec for each schema
@@ -35,23 +40,33 @@ public class OpenAPIExploder {
         Schema clonedSchema = cloneSchema(schema);
 
         // Rewrite references to external files
-        rewriteReferences(clonedSchema, schemaName, format);
+        rewriteReferences(clonedSchema, schemaName, format, (StringUtils.isBlank(baseUrl) ? null : StringUtils.stripEnd(baseUrl, "/")));
 
         // Create new OpenAPI object with single schema
-        OpenAPI newSpec = new OpenAPI();
-        newSpec.setOpenapi(openAPI.getOpenapi());
-        newSpec.setInfo(openAPI.getInfo());
+        OpenAPI newOpenAPI = new OpenAPI();
+        newOpenAPI.setOpenapi(openAPI.getOpenapi());
+        newOpenAPI.setInfo(openAPI.getInfo());
+        
+        Paths paths = new Paths();
+        newOpenAPI.setPaths(paths);
 
         Components components = new Components();
         components.addSchemas(schemaName, clonedSchema);
-        newSpec.setComponents(components);
-
-        createZipFile(explodedSpecs, format, zipFile);
+        newOpenAPI.setComponents(components);
+        
+        explodedOpenAPIMap.put(schemaName, newOpenAPI);
       }
+      
+      createZipFile(explodedOpenAPIMap, format, zipFile);
+    } else {
+      throw new IOException("OpenAPI description does not contains JSON schemas");
     }
   }
   
   private void createZipFile(Map<String, OpenAPI> specs, String format, File zipFile) throws FileNotFoundException, IOException {
+    if (zipFile.isFile()) {
+      FileUtils.deleteQuietly(zipFile);
+    }
     try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));
         OutputStreamWriter osw = new OutputStreamWriter(zos, StandardCharsets.UTF_8);
         BufferedWriter writer = new BufferedWriter(osw)) {
@@ -74,16 +89,20 @@ public class OpenAPIExploder {
     }
   }
 
-  private void rewriteReferences(Schema schema, String currentSchemaName, String format) {
+  private void rewriteReferences(Schema schema, String currentSchemaName, String format, String baseUrl) {
     if (schema == null)
       return;
 
     // Rewrite direct $ref
     if (schema.get$ref() != null) {
       String refSchemaName = extractSchemaNameFromRef(schema.get$ref());
-      // Change from "#/components/schemas/Pet" to
-      // "./Pet.yaml#/components/schemas/Pet"
-      schema.set$ref("./" + refSchemaName + ".yaml#/components/schemas/" + refSchemaName);
+      String ref;
+      if (baseUrl == null) {
+        ref = "./" + refSchemaName + "." + format + "#/components/schemas/" + refSchemaName;
+      } else {
+        ref = baseUrl + "/" + refSchemaName + "." + format + "#/components/schemas/" + refSchemaName;
+      }
+      schema.set$ref(ref);
     }
 
     // Rewrite references in properties
@@ -91,7 +110,7 @@ public class OpenAPIExploder {
       Map<String, Schema> properties = schema.getProperties();
       for (Object value : properties.values()) {
         if (value instanceof Schema) {
-          rewriteReferences((Schema) value, currentSchemaName, format);
+          rewriteReferences((Schema) value, currentSchemaName, format, baseUrl);
         }
       }
     }
@@ -100,7 +119,7 @@ public class OpenAPIExploder {
     if (schema.getAllOf() != null) {
       for (Object composedSchema : schema.getAllOf()) {
         if (composedSchema instanceof Schema) {
-          rewriteReferences((Schema) composedSchema, currentSchemaName, format);
+          rewriteReferences((Schema) composedSchema, currentSchemaName, format, baseUrl);
         }
       }
     }
@@ -108,7 +127,7 @@ public class OpenAPIExploder {
     if (schema.getOneOf() != null) {
       for (Object composedSchema : schema.getOneOf()) {
         if (composedSchema instanceof Schema) {
-          rewriteReferences((Schema) composedSchema, currentSchemaName, format);
+          rewriteReferences((Schema) composedSchema, currentSchemaName, format, baseUrl);
         }
       }
     }
@@ -116,24 +135,24 @@ public class OpenAPIExploder {
     if (schema.getAnyOf() != null) {
       for (Object composedSchema : schema.getAnyOf()) {
         if (composedSchema instanceof Schema) {
-          rewriteReferences((Schema) composedSchema, currentSchemaName, format);
+          rewriteReferences((Schema) composedSchema, currentSchemaName, format, baseUrl);
         }
       }
     }
 
     // Rewrite references in items (for arrays)
     if (schema.getItems() != null) {
-      rewriteReferences(schema.getItems(), currentSchemaName, format);
+      rewriteReferences(schema.getItems(), currentSchemaName, format, baseUrl);
     }
 
     // Rewrite references in additionalProperties
     if (schema.getAdditionalProperties() instanceof Schema) {
-      rewriteReferences((Schema) schema.getAdditionalProperties(), currentSchemaName, format);
+      rewriteReferences((Schema) schema.getAdditionalProperties(), currentSchemaName, format, baseUrl);
     }
 
     // Handle not schema
     if (schema.getNot() != null) {
-      rewriteReferences(schema.getNot(), currentSchemaName, format);
+      rewriteReferences(schema.getNot(), currentSchemaName, format, baseUrl);
     }
   }
 
